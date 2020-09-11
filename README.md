@@ -1,1 +1,1 @@
- # CrownBreweryRecipeMaker
+ # CrownBreweryRecipeManager
