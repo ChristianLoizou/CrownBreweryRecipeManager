@@ -2,7 +2,7 @@ from collections import defaultdict
 from tkinter import *
 
 class Application(Tk):
-    
+
     def __init__(self, /, *, title):
         self.app = Tk()
         self.title = title
@@ -30,5 +30,5 @@ def setupWindow():
 
 if __name__ == '__main__':
     application = setupWindow()
-    print(application)
+    print(application.items)
     application.app.mainloop()
