@@ -95,11 +95,16 @@ def createBeer(application, data):
     name = data.pop(0)
     if name.get().lower() in map(lambda b: b.name.lower(), application.beers):
         application.widgets["label_errormessage"]["text"] = "Error adding beer. Name already taken"
+        return False
     else:
         headers = ["type", "servingtemp", "abv", "ibu", "srm", "gravity"]
         newbeer = Beer(name.get())
         for (kw, v) in zip(headers, data):
             val = repr(v.get())
+            if len(v.get()) == 0 or (kw=="type" and v.get()=="Choose a type") or (kw=="srm" and v.get()=="Choose an SRM value"):
+                keyword = kw if kw != "servingtemp" else "serving temp"
+                application.widgets["label_errormessage"]["text"] = f"Error adding beer. Enter valid {keyword}."
+                return False
             exec(f"newbeer.{kw} = {val}")
         application.beers.append(newbeer)
         saveBeers(application.beers)
@@ -203,7 +208,7 @@ def setupWindow():
     submit = root.gridWidget(createframe, Button, "button_submitcreation", row=3, column=2, text="Create",
         command=lambda: createBeer(root, [name, newbeer["type"], servingtemp, abv, ibu, newbeer["srm"], gravity]),
         gkws={"columnspan":2, "sticky":"ew", "padx":5, "pady":5})
-    submit.bind("<Return>", lambda: createBeer(root, [name, newbeer["type"], servingtemp, abv, ibu, newbeer["srm"], gravity]))
+    # submit.bind("<Return>", lambda: createBeer(root, [name, newbeer["type"], servingtemp, abv, ibu, newbeer["srm"], gravity]))
 
     # Set up the "view" frame
     ROWSIZE = 3
@@ -214,7 +219,8 @@ def setupWindow():
         command=beer.displayInformation, gkws={"ipadx":35, "ipady":15, "padx":5, "pady":5})
 
     # Add an empty error message label for use later
-    root.gridWidget(root.app, Label, "label_errormessage", row=2, column=0, text="", fg="red", gkws={"columnspan":5, "sticky":"s"})
+    root.gridWidget(root.app, Label, "label_errormessage", row=2, column=0, text="", fg="red",
+        gkws={"columnspan":5, "sticky":"s"})
 
     return root
 
