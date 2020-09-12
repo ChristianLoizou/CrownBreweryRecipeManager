@@ -1,18 +1,26 @@
 {
-  "Crown Pale": {
-    "type": "Belgian Pale Ale",
-    "abv": "4.2",
-    "gravity": "5.3",
-    "ibu": "40",
-    "srm": "Pale Straw",
-    "servingtemp": "5"
-  },
   "Crown Porter": {
     "type": "English Porter",
-    "abv": "4.8",
-    "gravity": "8.2",
-    "ibu": "30",
+    "abv": "4.5",
+    "gravity": "8",
+    "ibu": "20",
     "srm": "Deep Brown",
-    "servingtemp": "8"
+    "servingtemp": "7"
+  },
+  "Crown Golden": {
+    "type": "Britisch Golden Ale",
+    "abv": "4.2",
+    "gravity": "5.0",
+    "ibu": "40",
+    "srm": "Pale Straw",
+    "servingtemp": "7"
+  },
+  "Crown Pale": {
+    "type": "Belgian Pale Ale",
+    "servingtemp": "5",
+    "abv": "4.3",
+    "ibu": "50",
+    "srm": "Choose an SRM value",
+    "gravity": "3.4"
   }
 }
