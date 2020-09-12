@@ -3,15 +3,21 @@ from collections import defaultdict
 from tkinter import *
 from tkinter.ttk import Separator, Scrollbar
 
+# A list of widgets that take ARGS instead of KWARGS
+# (ie. widgets that must take multiple positional variables on initialisation)
 COMPLEXWIDGETS = [OptionMenu]
 
+
 class BeerEncoder(json.JSONEncoder):
+    """ An encoder class for saving Beer object data to JSON """
     def default(self, o):
         return o.__dict__
 
 class Beer:
     """ Beer object. Stores all data about custom beers, including name, recipe, ABV, gravity, etc..."""
+
     def __init__(self, name, jsondata=None):
+        """ Initialise the Beer object, loading its data from JSON string if passed """
         self.name = name
         if jsondata:
             self.type = jsondata["type"]
@@ -27,9 +33,12 @@ class Beer:
     def __str__(self):
         return repr(self)
 
-    def _getformattedname(self): return "".join([w.capitalize() for w in self.name.split()])
+    def _getformattedname(self):
+        """ Returns the formatted name for view button """
+        return "".join([w.capitalize() for w in self.name.split()])
 
     def displayInformation(self):
+        """ Creates a popup window showing the beer's data """
         popup = Tk()
         popup.title(self.name)
         Label(popup, text=self.name, font=("Helvetica", 18, "bold")).grid(row=0, column=0, columnspan=2)
@@ -60,6 +69,8 @@ class Application(Tk):
         return repr(self)
 
     def packWidget(self, master, widget_type, widget_name, *args, pkws=None, **kwargs):
+        """ Creates a new instance of widget with kwargs, packs onto master widget, saves the instance to Application.items
+            and returns widget instance for use """
         widget = widget_type(master, kwargs)
         if pkws: widget.pack(pkws)
         else: widget.pack()
@@ -67,6 +78,8 @@ class Application(Tk):
         return widget
 
     def gridWidget(self, master, widget_type, widget_name, *args, row, column, gkws=None, **kwargs):
+        """ Resizes grid layout, creates a new widget instance with args and kwargs, adds to the grid,
+            saves the instance to Application.items and returns widget instance for use """
         if row > self.rows: self.rows = row
         if column > self.cols: self.cols = column
         if widget_type in COMPLEXWIDGETS: widget = widget_type(master, *args)
@@ -109,6 +122,7 @@ def saveBeers(beers, path="data/beers.json"):
     json.dump(saveJSON, open(path, "w"), indent=2)
 
 def restartApplication(application):
+    """ Destroys the TKinter Window, deletes the instance of Application class, and creates a new one from scratch """
     application.app.destroy()
     del(application)
     application = setupWindow()
@@ -142,14 +156,8 @@ def setupWindow():
     root.gridWidget(titleframe, Label, "label_subtitle", row=1, column=0, text="by Christian A Loizou")
 
     # Set up the "create" frame
-
     newbeer = dict(
-        name = StringVar(),
         type = StringVar(),
-        servingtemp = DoubleVar(),
-        gravity = IntVar(),
-        abv = DoubleVar(),
-        ibu = IntVar(),
         srm = StringVar()
     )
 
@@ -162,22 +170,22 @@ def setupWindow():
     newbeer["srm"].set("Choose an SRM value")
 
     root.gridWidget(createframe, Label, "label_beername", row=0, column=0, text="Enter beer name: ")
-    name = root.gridWidget(createframe, Entry, "entry_beername", newbeer["name"], row=0, column=1)
+    name = root.gridWidget(createframe, Entry, "entry_beername", row=0, column=1)
     root.gridWidget(createframe, Label, "label_beertype", row=0, column=2, text="Enter beer type: ")
     type = root.gridWidget(createframe, OptionMenu, "entry_beertype", newbeer["type"], *BEERTYPES, row=0, column=3)
 
     root.gridWidget(createframe, Label, "label_servingtemp", row=1, column=0, text="Enter serving temp. (ºC): ")
-    servingtemp = root.gridWidget(createframe, Entry, "entry_servingtemp", newbeer["servingtemp"], row=1, column=1, width=10)
+    servingtemp = root.gridWidget(createframe, Entry, "entry_servingtemp", row=1, column=1, width=10)
     root.gridWidget(createframe, Label, "label_abv", row=1, column=2, text="Enter ABV (%): ")
-    abv = root.gridWidget(createframe, Entry, "entry_abv", newbeer["abv"], row=1, column=3, width=10)
+    abv = root.gridWidget(createframe, Entry, "entry_abv", row=1, column=3, width=10)
 
     root.gridWidget(createframe, Label, "label_ibu", row=2, column=0, text="Enter IBU value: ")
-    ibu = root.gridWidget(createframe, Entry, "entry_ibu", newbeer["ibu"], row=2, column=1, width=10)
+    ibu = root.gridWidget(createframe, Entry, "entry_ibu", row=2, column=1, width=10)
     root.gridWidget(createframe, Label, "label_srm", row=2, column=2, text="Enter SRM value: ")
     srm = root.gridWidget(createframe, OptionMenu, "entry_srm", newbeer["srm"], *SRMSCALE, row=2, column=3)
 
     root.gridWidget(createframe, Label, "label_gravity", row=3, column=0, text="Enter gravity: ")
-    gravity = root.gridWidget(createframe, Entry, "entry_gravity", newbeer["gravity"], row=3, column=1, width=10)
+    gravity = root.gridWidget(createframe, Entry, "entry_gravity", row=3, column=1, width=10)
 
     submit = root.gridWidget(createframe, Button, "button_submitcreation", row=3, column=2, text="Create",
         command=lambda: createBeer(root, [name, newbeer["type"], servingtemp, abv, ibu, newbeer["srm"], gravity]),
