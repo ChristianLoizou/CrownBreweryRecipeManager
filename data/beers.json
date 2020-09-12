@@ -17,10 +17,18 @@
   },
   "Crown Bitter": {
     "type": "Strong Bitter",
-    "servingtemp": "8",
     "abv": "5",
+    "gravity": "8.4",
     "ibu": "26",
     "srm": "Ruby Brown",
-    "gravity": "8.4"
+    "servingtemp": "8"
+  },
+  "Crown Porter": {
+    "type": "English Porter",
+    "servingtemp": "8",
+    "abv": "4.5",
+    "ibu": "40",
+    "srm": "Deep Brown",
+    "gravity": "9"
   }
 }
