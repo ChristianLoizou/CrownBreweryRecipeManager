@@ -58,9 +58,9 @@ class Application(Tk):
         self.title, self.iconpath = title, iconpath
         self.rows, self.cols = 1, 1
         self.app.title(title)
-        # self.app.geometry(size)
-        # self.app.minsize(830, 600)
-        self.items = defaultdict(None)
+        self.app.geometry(size)
+        self.app.minsize(830, 600)
+        self.widgets = defaultdict(None)
         self.beers = loadBeers(jsonpath)
 
     def __repr__(self):
@@ -75,7 +75,7 @@ class Application(Tk):
         widget = widget_type(master, kwargs)
         if pkws: widget.pack(pkws)
         else: widget.pack()
-        self.items[widget_name] = widget
+        self.widgets[widget_name] = widget
         return widget
 
     def gridWidget(self, master, widget_type, widget_name, *args, row, column, gkws=None, **kwargs):
@@ -87,20 +87,23 @@ class Application(Tk):
         else: widget = widget_type(master, kwargs)
         if gkws: widget.grid(row=row, column=column, **gkws)
         else: widget.grid(row=row, column=column)
-        self.items[widget_name] = widget
+        self.widgets[widget_name] = widget
         return widget
 
 def createBeer(application, data):
     """ Creates a new beer, adds it to the 'application.beers' list, and saves it to the JSON file """
     name = data.pop(0)
-    headers = ["type", "servingtemp", "abv", "ibu", "srm", "gravity"]
-    newbeer = Beer(name.get())
-    for (kw, v) in zip(headers, data):
-        val = repr(v.get())
-        exec(f"newbeer.{kw} = {val}")
-    application.beers.append(newbeer)
-    saveBeers(application.beers)
-    application = restartApplication(application)
+    if name.get().lower() in map(lambda b: b.name.lower(), application.beers):
+        application.widgets["label_errormessage"]["text"] = "Error adding beer. Name already taken"
+    else:
+        headers = ["type", "servingtemp", "abv", "ibu", "srm", "gravity"]
+        newbeer = Beer(name.get())
+        for (kw, v) in zip(headers, data):
+            val = repr(v.get())
+            exec(f"newbeer.{kw} = {val}")
+        application.beers.append(newbeer)
+        saveBeers(application.beers)
+        application = restartApplication(application)
 
 def deleteBeer(beername):
     global application
@@ -209,6 +212,10 @@ def setupWindow():
         _row, _col = 1 + (beernum//ROWSIZE), beernum%ROWSIZE
         root.gridWidget(viewframe, Button, buttonname, row=_row, column=_col, text=beer.name,
         command=beer.displayInformation, gkws={"ipadx":35, "ipady":15, "padx":5, "pady":5})
+
+    # Add an empty error message label for use later
+    root.gridWidget(root.app, Label, "label_errormessage", row=2, column=0, text="", fg="red", gkws={"columnspan":5, "sticky":"s"})
+
     return root
 
 if __name__ == "__main__":
