@@ -43,12 +43,13 @@ class Beer:
         popup.title(self.name)
         Label(popup, text=self.name, font=("Helvetica", 18, "bold")).grid(row=0, column=0, columnspan=2)
         Separator(popup, orient=HORIZONTAL).grid(row=1, column=0, columnspan=2, sticky="ew")
-        datapairs = [("name", self.name), ("beer type", self.type), ("abv", self.abv), ("gravity", self.gravity),
-                ("ibu", self.ibu), ("srm", self.srm)]
-        for r in range(1, 7):
+        datapairs = [("name", self.name), ("beer type", self.type), ("abv", self.abv), ("serving temp.", self.servingtemp),
+        ("gravity", self.gravity), ("ibu", self.ibu), ("srm", self.srm)]
+        for r in range(1, 8):
             t, d = datapairs[r-1]
             Label(popup, text=t.capitalize()).grid(row=r+1, column=0)
             Label(popup, text=d).grid(row=r+1, column=1)
+        Button(popup, text="Delete Beer", command=lambda: deleteBeer(self.name) ).grid(row=9, column=0, columnspan=2)
 
 class Application(Tk):
     """ Application object. Blueprint for the window shown to user, with custom methods to allow for easier adding of widgets"""
@@ -90,7 +91,7 @@ class Application(Tk):
         return widget
 
 def createBeer(application, data):
-    """ Creates a new beer, adds it to the 'application.beers' list, and saves it to the JSON file"""
+    """ Creates a new beer, adds it to the 'application.beers' list, and saves it to the JSON file """
     name = data.pop(0)
     headers = ["type", "servingtemp", "abv", "ibu", "srm", "gravity"]
     newbeer = Beer(name.get())
@@ -98,6 +99,13 @@ def createBeer(application, data):
         val = repr(v.get())
         exec(f"newbeer.{kw} = {val}")
     application.beers.append(newbeer)
+    saveBeers(application.beers)
+    application = restartApplication(application)
+
+def deleteBeer(beername):
+    global application
+    """ Removes the beer with the given name from the beers list, saves the list, then reloads the application """
+    application.beers = filter(lambda b: b.name != beername, application.beers)
     saveBeers(application.beers)
     application = restartApplication(application)
 
@@ -123,8 +131,10 @@ def saveBeers(beers, path="data/beers.json"):
 
 def restartApplication(application):
     """ Destroys the TKinter Window, deletes the instance of Application class, and creates a new one from scratch """
-    application.app.destroy()
-    del(application)
+    try:
+        application.app.destroy()
+    except:
+        application.app.quit()
     application = setupWindow()
     return application
 
