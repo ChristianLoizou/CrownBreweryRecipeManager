@@ -1,34 +1,18 @@
 {
-  "Crown Gold": {
-    "type": "Britisch Golden Ale",
-    "abv": "4.1",
-    "gravity": "8.3",
-    "ibu": "30",
-    "srm": "Deep Gold",
-    "servingtemp": "7"
-  },
-  "Crown Blonde": {
-    "type": "Blonde Ale",
-    "abv": "3.8",
-    "gravity": "6.3",
-    "ibu": "32",
+  "Crown Pale": {
+    "type": "Belgian Pale Ale",
+    "abv": "4.2",
+    "gravity": "5.3",
+    "ibu": "40",
     "srm": "Pale Straw",
-    "servingtemp": "7"
-  },
-  "Crown Bitter": {
-    "type": "Strong Bitter",
-    "abv": "5",
-    "gravity": "8.4",
-    "ibu": "26",
-    "srm": "Ruby Brown",
-    "servingtemp": "8"
+    "servingtemp": "5"
   },
   "Crown Porter": {
     "type": "English Porter",
-    "servingtemp": "8",
-    "abv": "4.5",
-    "ibu": "40",
+    "abv": "4.8",
+    "gravity": "8.2",
+    "ibu": "30",
     "srm": "Deep Brown",
-    "gravity": "9"
+    "servingtemp": "8"
   }
 }
