@@ -51,12 +51,12 @@ class Application(Tk):
     def __str__(self):
         return repr(self)
 
-    def packLabelledFrame(self, master, frame_name, *args, pkws=None, **kwargs):
-        frame = LabelFrame(master, kwargs)
-        if pkws: frame.pack(pkws)
-        else: frame.pack()
-        self.items[frame_name] = frame
-        return frame
+    def packWidget(self, master, widget_type, widget_name, *args, pkws=None, **kwargs):
+        widget = widget_type(master, kwargs)
+        if pkws: widget.pack(pkws)
+        else: widget.pack()
+        self.items[widget_name] = widget
+        return widget
 
     def gridWidget(self, master, widget_type, widget_name, *args, row, column, gkws=None, **kwargs):
         if row > self.rows: self.rows = row
@@ -86,12 +86,10 @@ def setupWindow():
         height=65, gkws={"sticky":"new", "columnspan":3})
     bodyframe = root.gridWidget(root.app, Frame, "frame_bodyframe", row=1, column=0, highlightthickness=1,
         gkws={"sticky":"nsew", "columnspan":3})
-    createframe = root.packLabelledFrame(bodyframe, "frame_createframe", text="Create New Recipe",
-        highlightbackground="black", highlightthickness=1,
-        pkws={"fill":"both"})
-    viewframe = root.packLabelledFrame(bodyframe, "frame_viewframe", text="View Recipes",
-        highlightbackground="black", highlightthickness=1,
-        pkws={"fill":"both"})
+    createframe = root.packWidget(bodyframe, LabelFrame, "frame_createframe", text="Create New Recipe",
+        highlightbackground="black", highlightthickness=1, pkws={"fill":"both"})
+    viewframe = root.packWidget(bodyframe, LabelFrame, "frame_viewframe", text="View Recipes",
+        highlightbackground="black", highlightthickness=1, pkws={"fill":"both"})
 
     # Space the "title", "create" and "view" frames correctly
     for i in range(root.rows): root.app.grid_rowconfigure(i, weight=i)
