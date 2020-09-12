@@ -5,6 +5,7 @@
     "gravity": "None",
     "IBU": "None",
     "SRM": "None",
+    "servingtemp": 7.0,
     "recipe": {
       "hops": {
         "hop type 1": "2g",
@@ -22,6 +23,7 @@
     "gravity": "None",
     "IBU": "None",
     "SRM": "None",
+    "servingtemp": 7.0,
     "recipe": {
       "hops": {
         "hop type 1": "4g",
