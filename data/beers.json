@@ -1,38 +1,26 @@
 {
-  "Crown Pale": {
-    "type": "Pale Ale",
-    "ABV": 5.0,
-    "gravity": "None",
-    "IBU": "None",
-    "SRM": "None",
-    "servingtemp": 7.0,
-    "recipe": {
-      "hops": {
-        "hop type 1": "2g",
-        "hop type 2": "3g"
-      },
-      "malts": {
-        "malt type 1": "1kg",
-        "malt type 2": "300g"
-      }
-    }
+  "Crown Gold": {
+    "type": "Britisch Golden Ale",
+    "abv": "4.1",
+    "gravity": "8.3",
+    "ibu": "30",
+    "srm": "Deep Gold",
+    "servingtemp": "7"
   },
-  "Crown Stout": {
-    "type": "Stout",
-    "ABV": 5.5,
-    "gravity": "None",
-    "IBU": "None",
-    "SRM": "None",
-    "servingtemp": 7.0,
-    "recipe": {
-      "hops": {
-        "hop type 1": "4g",
-        "hop type 2": "2g"
-      },
-      "malts": {
-        "malt type 1": "1.3kg",
-        "malt type 2": "370g"
-      }
-    }
+  "Crown Blonde": {
+    "type": "Blonde Ale",
+    "abv": "3.8",
+    "gravity": "6.3",
+    "ibu": "32",
+    "srm": "Pale Straw",
+    "servingtemp": "7"
+  },
+  "Crown Bitter": {
+    "type": "Strong Bitter",
+    "servingtemp": "8",
+    "abv": "5",
+    "ibu": "26",
+    "srm": "Ruby Brown",
+    "gravity": "8.4"
   }
 }
