@@ -1,34 +1,36 @@
 {
-  "name": "Crown Pale",
-  "type": "Pale Ale",
-  "ABV": 5.0,
-  "gravity": "None",
-  "IBU": "None",
-  "SRM": "None",
-  "recipe" : {
-    "hops": {
-      "hop type 1": "2g",
-      "hop type 2": "3g"
-    },
-    "malts": {
-      "malt type 1": "1kg",
-      "malt type 2": "300g"
+  "Crown Pale": {
+    "type": "Pale Ale",
+    "ABV": 5.0,
+    "gravity": "None",
+    "IBU": "None",
+    "SRM": "None",
+    "recipe": {
+      "hops": {
+        "hop type 1": "2g",
+        "hop type 2": "3g"
+      },
+      "malts": {
+        "malt type 1": "1kg",
+        "malt type 2": "300g"
+      }
     }
   },
-  "name": "Crown Bitter",
-  "type": "Stout",
-  "ABV": 5.6,
-  "gravity": "None",
-  "IBU": "None",
-  "SRM": "None",
-  "recipe" : {
-    "hops": {
-      "hop type 1": "4g",
-      "hop type 2": "3g"
-    },
-    "malts": {
-      "malt type 1": "1.2kg",
-      "malt type 2": "550g"
+  "Crown Stout": {
+    "type": "Stout",
+    "ABV": 5.5,
+    "gravity": "None",
+    "IBU": "None",
+    "SRM": "None",
+    "recipe": {
+      "hops": {
+        "hop type 1": "4g",
+        "hop type 2": "2g"
+      },
+      "malts": {
+        "malt type 1": "1.3kg",
+        "malt type 2": "370g"
+      }
     }
   }
 }
