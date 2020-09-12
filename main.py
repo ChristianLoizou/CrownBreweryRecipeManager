@@ -1,19 +1,25 @@
-import json
+import json, csv
 from collections import defaultdict
 from tkinter import *
 from tkinter.ttk import Separator, Scrollbar
 
 COMPLEXWIDGETS = [OptionMenu]
 
+class BeerEncoder(json.JSONEncoder):
+    def default(self, o):
+        return o.__dict__
+
 class Beer:
     """ Beer object. Stores all data about custom beers, including name, recipe, ABV, gravity, etc..."""
-    def __init__(self, name, jsondata):
-        self.name, self.type = name, jsondata["type"]
-        self.abv, self.gravity = jsondata["ABV"], jsondata["gravity"]
-        self.ibu, self.srm = jsondata["IBU"], jsondata["SRM"]
-        self.servingtemp = jsondata["servingtemp"]
-        self.recipe = jsondata["recipe"]
-        self.image = None
+    def __init__(self, name, jsondata=None):
+        self.name = name
+        if jsondata:
+            self.type = jsondata["type"]
+            self.abv, self.gravity = jsondata["abv"], jsondata["gravity"]
+            self.ibu, self.srm = jsondata["ibu"], jsondata["srm"]
+            self.servingtemp = jsondata["servingtemp"]
+            # self.recipe = jsondata["recipe"]
+            # self.image = None
 
     def __repr__(self):
         return f"<Beer: {self.name}>"
@@ -42,8 +48,8 @@ class Application(Tk):
         self.title, self.iconpath = title, iconpath
         self.rows, self.cols = 1, 1
         self.app.title(title)
-        self.app.geometry(size)
-        self.app.minsize(830, 600)
+        # self.app.geometry(size)
+        # self.app.minsize(830, 600)
         self.items = defaultdict(None)
         self.beers = loadBeers(jsonpath)
 
@@ -70,20 +76,43 @@ class Application(Tk):
         self.items[widget_name] = widget
         return widget
 
-def createBeer(application, *args):
-    # Create new beer and append it to 'application.beers'
-    pass
+def createBeer(application, data):
+    """ Creates a new beer, adds it to the 'application.beers' list, and saves it to the JSON file"""
+    name = data.pop(0)
+    headers = ["type", "servingtemp", "abv", "ibu", "srm", "gravity"]
+    newbeer = Beer(name.get())
+    for (kw, v) in zip(headers, data):
+        val = repr(v.get())
+        exec(f"newbeer.{kw} = {val}")
+    application.beers.append(newbeer)
+    saveBeers(application.beers)
+    application = restartApplication(application)
 
 def loadBeers(path="data/beers.json"):
     """ Loads beer data from JSON file passed as arg """
-    with open(path, "r") as beerfile:
-        beerdata = json.load(beerfile)
-    return [Beer(k, v) for (k,v) in beerdata.items()]
+    try:
+        with open(path, "r") as beerfile:
+            beerdata = json.load(beerfile)
+        return [Beer(k, v) for (k,v) in beerdata.items()]
+    except json.JSONDecodeError:
+        return list()
 
-def saveBeers(path, beers):
+def saveBeers(beers, path="data/beers.json"):
     """ Saves beer data to JSON file passed as arg """
-    with open(path, "w") as beerfile:
-        json.dump(beers, beerfile, indent=2)
+    JSONstrings = [json.dumps(beer, cls=BeerEncoder) for beer in beers]
+    loadedJSON = [json.loads(s) for s in JSONstrings]
+    saveJSON = dict()
+    for beer in filter(lambda b: b["name"] != '', loadedJSON):
+        name = beer["name"]
+        del(beer["name"])
+        saveJSON[name] = beer
+    json.dump(saveJSON, open(path, "w"), indent=2)
+
+def restartApplication(application):
+    application.app.destroy()
+    del(application)
+    application = setupWindow()
+    return application
 
 def setupWindow():
     """ Sets up GUI with widgets """
@@ -114,30 +143,53 @@ def setupWindow():
 
     # Set up the "create" frame
 
-    BEERTYPES = tuple(sorted(["IPA", "Golden Ale", "American IPA", "Bitter", "Stout"]))
-    beername = StringVar()
-    beertype = StringVar()
-    beerservingtemp = DoubleVar()
+    newbeer = dict(
+        name = StringVar(),
+        type = StringVar(),
+        servingtemp = DoubleVar(),
+        gravity = IntVar(),
+        abv = DoubleVar(),
+        ibu = IntVar(),
+        srm = StringVar()
+    )
 
-    beertype.set("Choose a type")
+    with open("data/beertypes.csv", "r") as typecsvfile:
+        BEERTYPES = list(csv.reader(typecsvfile))[0]
+    with open("data/srm.csv", "r") as srmcsvfile:
+        SRMSCALE = list(csv.reader(srmcsvfile))[0]
+
+    newbeer["type"].set("Choose a type")
+    newbeer["srm"].set("Choose an SRM value")
 
     root.gridWidget(createframe, Label, "label_beername", row=0, column=0, text="Enter beer name: ")
-    name = root.gridWidget(createframe, Entry, "entry_beername", beername, row=0, column=1)
+    name = root.gridWidget(createframe, Entry, "entry_beername", newbeer["name"], row=0, column=1)
     root.gridWidget(createframe, Label, "label_beertype", row=0, column=2, text="Enter beer type: ")
-    type = root.gridWidget(createframe, OptionMenu, "entry_beertype", beertype, *BEERTYPES, row=0, column=3)
-    root.gridWidget(createframe, Label, "label_servingtemp", row=1, column=0, text="Enter serving temp. (ºC): ")
-    servingtemp = root.gridWidget(createframe, Entry, "entry_servingtemp", beerservingtemp, row=1, column=1, width=10)
+    type = root.gridWidget(createframe, OptionMenu, "entry_beertype", newbeer["type"], *BEERTYPES, row=0, column=3)
 
-    submit = root.gridWidget(createframe, Button, "button_submitcreation", row=3, column=0, text="Create",
-        command=lambda: createBeer(root, beername, beertype, beerservingtemp),
-        gkws={"columnspan":4, "sticky":"ew", "padx":5, "pady":5})
+    root.gridWidget(createframe, Label, "label_servingtemp", row=1, column=0, text="Enter serving temp. (ºC): ")
+    servingtemp = root.gridWidget(createframe, Entry, "entry_servingtemp", newbeer["servingtemp"], row=1, column=1, width=10)
+    root.gridWidget(createframe, Label, "label_abv", row=1, column=2, text="Enter ABV (%): ")
+    abv = root.gridWidget(createframe, Entry, "entry_abv", newbeer["abv"], row=1, column=3, width=10)
+
+    root.gridWidget(createframe, Label, "label_ibu", row=2, column=0, text="Enter IBU value: ")
+    ibu = root.gridWidget(createframe, Entry, "entry_ibu", newbeer["ibu"], row=2, column=1, width=10)
+    root.gridWidget(createframe, Label, "label_srm", row=2, column=2, text="Enter SRM value: ")
+    srm = root.gridWidget(createframe, OptionMenu, "entry_srm", newbeer["srm"], *SRMSCALE, row=2, column=3)
+
+    root.gridWidget(createframe, Label, "label_gravity", row=3, column=0, text="Enter gravity: ")
+    gravity = root.gridWidget(createframe, Entry, "entry_gravity", newbeer["gravity"], row=3, column=1, width=10)
+
+    submit = root.gridWidget(createframe, Button, "button_submitcreation", row=3, column=2, text="Create",
+        command=lambda: createBeer(root, [name, newbeer["type"], servingtemp, abv, ibu, newbeer["srm"], gravity]),
+        gkws={"columnspan":2, "sticky":"ew", "padx":5, "pady":5})
+    submit.bind("<Return>", lambda: createBeer(root, [name, newbeer["type"], servingtemp, abv, ibu, newbeer["srm"], gravity]))
 
     # Set up the "view" frame
-    ROWSIZE = 5
+    ROWSIZE = 3
     for beernum, beer in enumerate(root.beers):
         buttonname = "button_"+beer._getformattedname()
-        _row = 1 + (beernum//ROWSIZE)
-        root.gridWidget(viewframe, Button, buttonname, row=_row, column=beernum%ROWSIZE, text=beer.name,
+        _row, _col = 1 + (beernum//ROWSIZE), beernum%ROWSIZE
+        root.gridWidget(viewframe, Button, buttonname, row=_row, column=_col, text=beer.name,
         command=beer.displayInformation, gkws={"ipadx":35, "ipady":15, "padx":5, "pady":5})
     return root
 
