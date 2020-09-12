@@ -17,10 +17,26 @@
   },
   "Crown Pale": {
     "type": "Belgian Pale Ale",
-    "servingtemp": "5",
     "abv": "4.3",
+    "gravity": "3.4",
     "ibu": "50",
     "srm": "Choose an SRM value",
-    "gravity": "3.4"
+    "servingtemp": "5"
+  },
+  "Crown Pils": {
+    "type": "German Pils",
+    "abv": "4.5",
+    "gravity": "3",
+    "ibu": "25",
+    "srm": "Amber-Brown",
+    "servingtemp": "4"
+  },
+  "Crown Sweet Stout": {
+    "type": "Sweet Stout",
+    "servingtemp": "6",
+    "abv": "7.4",
+    "ibu": "36",
+    "srm": "Deep Brown",
+    "gravity": "13.3"
   }
 }
