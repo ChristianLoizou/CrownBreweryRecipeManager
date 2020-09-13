@@ -30,13 +30,5 @@
     "ibu": "25",
     "srm": "Amber-Brown",
     "servingtemp": "4"
-  },
-  "Crown Sweet Stout": {
-    "type": "Sweet Stout",
-    "servingtemp": "6",
-    "abv": "7.4",
-    "ibu": "36",
-    "srm": "Deep Brown",
-    "gravity": "13.3"
   }
 }
