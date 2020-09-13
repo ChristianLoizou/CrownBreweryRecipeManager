@@ -12,5 +12,12 @@
     "dark":"#1D1E22",
     "light":"#AAAAAA",
     "tint":"#F96F0C"
+  },
+  "sky-blue": {
+    "bg": "#0096FE",
+    "fg": "#232323",
+    "dark":"#2B81E1",
+    "light":"#3545EF",
+    "tint":"#78FCFF"
   }
 }
