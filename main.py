@@ -1,28 +1,45 @@
 import csv, json, pickle, platform
 from collections import defaultdict
 from tkinter import *
-from tkinter.ttk import Separator, Scrollbar
+from tkinter.ttk import Button, Entry, Label, Scrollbar, Separator, Style
 
 # A list of widget types that take ARGS instead of KWARGS
 # (ie. widgets that must take multiple positional variables on initialisation)
 COMPLEXWIDGETS = [OptionMenu]
 
-# A dictionary of widget types and their possible styles ( '-' tag means override; all widgets of this type will override
-# the loaded application theme and keep their own style (for specific feature: bg, fg, etc... ))
+# A list of widget types that are used from the tkinter.ttk package, rather than the regular tkinter package.
+# Extra styling needed for these widgets.
+# NOTE: Widgets that are not a part of regular tkinter package (Scrollbar, Separator, etc...) do not need to be stored
+TTKWIDGETS = [Button, Label, Entry]
+
+# A dictionary to translate shorthand features to longhand (for ttk widget styling)
+FEATURE_TRANSLATE = {
+    "fg": "foreground",
+    "bg": "background"
+}
+
+# A dictionary of widget types and their styles, including overrides:
+#   '-' means override with value ( built-in colour, integer value, etc...)
+#       eg. 'bg-white' to make the background white, or borderwidth-0 to make borderwidth = 0
+#   '=' means override with another feature
+#       eg. "fg=tint" to make the foreground take the theme's 'tint' colour
+#   None for no styling (ie. ignore styleguide and leave as default) (NOTE: Cannot be left out, must be set to None)
 WIDGET_STYLES = {
     Label: ["fg", "bg"],
     Frame: ["bg"],
-    Button: ["fg-black", "bg-white"],
-    Entry: ["fg", "bg-white"],
+    Button: ["fg", "borderwidth-0"],
+    Entry: None,
     OptionMenu: ["fg-black", "bg-white"],
     LabelFrame: ["fg", "bg"],
     Canvas: ["bg"],
-    Menu: [] # No styling done to Menu widgets
+    Menu: None
 }
 
-# A dictionary of widget names with features of the associated widget that should be overridden
+# A dictionary of widget names with features of the associated widget that should be overridden.
+# NOTE: Widgets in the dictionary IGNORE 'WIDGET_STYLES' dictionary, so ALL styles must be applied here.
 OVERRIDE_WIDGET_FEATURES = defaultdict(list, {
-    "label_errormessage": ["fg-red"]
+    "label_errormessage": ["foreground-red", "bg", "weight-bold"],
+    "label_title": ["foreground=tint", "bg", "weight-bold"]
 })
 
 # Dictionary of options saved to pickle file for persistance between application runs
@@ -61,7 +78,7 @@ class Beer:
 
     def displayInformation(self):
         """ Creates a popup window showing the beer's data """
-        popup = PopupWindow(self.name)
+        popup = PopupWindow("View beer")
         Label(popup.popup, text=self.name, font=("Helvetica", 18, "bold")).grid(row=0, column=0, columnspan=2)
         Separator(popup.popup, orient=HORIZONTAL).grid(row=1, column=0, columnspan=2, sticky="ew")
         datapairs = [("name", self.name), ("beer type", self.type), ("abv", self.abv), ("serving temp.", self.servingtemp),
@@ -76,24 +93,25 @@ class Beer:
 class PopupWindow(Toplevel):
     """ PopupWindow object. Blueprint for the popup windows shown when editing preferences, viewing beers, etc. """
     def __init__(self, title, minsize=(None, None), resizable=False):
+        global styleguide
         self.popup = Toplevel(application.app)
         self.popup.title(title)
         self.popup.resizable(width=resizable, height=resizable)
         self.popup.minsize(*minsize)
         menubar = Menu(self.popup)
-        self.popup.config(menu=menubar)
+        bg = styleguide.lookup("TLabel", "background")
+        self.popup.config(menu=menubar, bg=bg)
 
 class Application(Tk):
     """ Application object. Blueprint for the window shown to user, with custom methods to allow for easier adding of widgets """
-    def __init__(self, /, *, title, \
-        size="650x500+400+200", jsonpath="data/beers.json", iconpath="assets/icon.ico"):
+    def __init__(self, /, *, title, jsonpath="data/beers.json", iconpath="assets/icon.ico"):
         self.app = Tk()
         self.title, self.iconpath = title, iconpath
         self.options = self.loadPickle()
         self.rows, self.cols = 1, 1
         self.app.title(title)
-        self.app.geometry(size)
-        self.app.minsize(650, 500)
+        self.app.resizable(False, False)
+        self.app.minsize(665, 500)
         self.widgets = defaultdict(None)
         self.beers = loadBeers(jsonpath)
         self.theme_name = self.options["THEME"]
@@ -125,54 +143,98 @@ class Application(Tk):
         return loaded_theme
 
     def packWidget(self, master, widget_type, widget_name, *args, pkws=None, **kwargs):
-        """ Creates a new instance of widget with kwargs, packs onto master widget, saves the instance to Application.items
-            and returns widget instance for use """
+        """ Creates a new instance of widget with kwargs, styles it, packs onto master widget,
+            saves the instance to Application.items and returns widget instance for use """
         widget = widget_type(master, kwargs)
-        for feature in WIDGET_STYLES[widget_type]:
-            # overriding application theme for custom colour (ie. Entry boxes bg always white, fg always black)
-            self.override(widget, feature)
-        if ( override := OVERRIDE_WIDGET_FEATURES[widget_name] ):
-            for feature in override:
-                for feature in override: self.override(widget, feature)
+        if widget_type in TTKWIDGETS and WIDGET_STYLES[widget_type]:
+            self.ttkoverride(widget, widget_type)
+        elif (styles := WIDGET_STYLES[widget_type]):
+            for feature in styles:
+                # overriding application theme for custom colour (ie. Entry boxes bg always white, fg always black)
+                self.override(widget, feature)
+        if ( override := OVERRIDE_WIDGET_FEATURES[widget_name] ) and (widget_type not in TTKWIDGETS):
+            for feature in override: self.override(widget, feature)
+        elif ( override := OVERRIDE_WIDGET_FEATURES[widget_name] ) and (widget_type in TTKWIDGETS):
+            self.ttkSpecificOverride(widget, widget_name, widget_type, override)
         if pkws: widget.pack(pkws)
         else: widget.pack()
         self.widgets[widget_name] = widget
         return widget
 
     def gridWidget(self, master, widget_type, widget_name, *args, row, column, gkws=None, **kwargs):
-        """ Resizes grid layout, creates a new widget instance with args and kwargs, adds to the grid,
+        """ Resizes grid layout, creates a new widget instance with args and kwargs, styles it, adds to the grid,
             saves the instance to Application.items and returns widget instance for use """
         if row > self.rows: self.rows = row
         if column > self.cols: self.cols = column
         if widget_type in COMPLEXWIDGETS: widget = widget_type(master, *args)
+        elif widget_type in TTKWIDGETS: widget = widget_type(master, *args, **kwargs)
         else: widget = widget_type(master, kwargs)
-        for feature in WIDGET_STYLES[widget_type]:
-            # overriding application theme for custom colour (ie. Entry boxes bg always white, fg always black)
-            self.override(widget, feature)
-        if ( override := OVERRIDE_WIDGET_FEATURES[widget_name] ):
+        if widget_type in TTKWIDGETS and WIDGET_STYLES[widget_type]:
+            self.ttkoverride(widget, widget_type)
+        elif (styles := WIDGET_STYLES[widget_type]):
+            for feature in styles:
+                self.override(widget, feature)
+        if ( override := OVERRIDE_WIDGET_FEATURES[widget_name] ) and (widget_type not in TTKWIDGETS):
             for feature in override: self.override(widget, feature)
+        elif ( override := OVERRIDE_WIDGET_FEATURES[widget_name] ) and (widget_type in TTKWIDGETS):
+            self.ttkSpecificOverride(widget, widget_name, widget_type, override)
         if gkws: widget.grid(row=row, column=column, **gkws)
         else: widget.grid(row=row, column=column)
         self.widgets[widget_name] = widget
         return widget
 
     def override(self, widget, feature):
-        if "-" in feature: feature, col = feature.split('-')
+        """ Method to override the style of given widget, if that widget is from regular tkinter widget set """
+        if "-" in feature: feature, col = feature.split("-")
         elif "=" in feature:
             feature, col = feature.split("=")
             try:
                 col = self.theme[col]
             except KeyError as e:
                 print(f"Failed assigning '{col}' to {repr(widget)}[{feature}]")
-                print(f"No theme feature called '{col}'. Perhaps you meant to use a '-' instead of a '=' when defining overrides?")
+                print(f"No theme feature called '{col}'. Perhaps you meant '-' instead of '=' when defining overrides?")
                 quit()
         else: col = self.theme[feature]
         try:
             widget[feature] = col
         except TclError as e:
             print(f"Failed assigning '{col}' to {repr(widget)}[{feature}]")
-            print(f"No theme feature called '{col}'. Perhaps you meant to use a '=' instead of a '-' when defining overrides?")
+            print(f"No built-in tkinter colour called '{col}'. Perhaps you meant '=' instead of '-' when defining overrides?")
             quit()
+
+    def ttkoverride(self, widget, widget_type, override=None):
+        """ Method to override the style of given widget, if that widget is from tkinter.ttk widget set """
+        global styleguide
+        features = dict()
+        for feature in WIDGET_STYLES[widget_type]:
+            if "-" in feature: feature, col = feature.split("-")
+            elif "=" in feature:
+                feature, col = feature.split("=")
+                col = self.theme[col]
+            else: col = self.theme[feature]
+            try: feature = FEATURE_TRANSLATE[feature]
+            except KeyError: pass
+            features[feature] = col
+        formatted_type = repr(widget_type).split("'")[1].split(".")[-1]
+        styleguide.configure(f".T{formatted_type}", **features)
+        widget.configure(style=f".T{formatted_type}")
+
+    def ttkSpecificOverride(self, widget, widget_name, widget_type, override):
+        global styleguide
+        features = dict()
+        for feature in override:
+            if "-" in feature: feature, col = feature.split("-")
+            elif "=" in feature:
+                feature, col = feature.split("=")
+                col = self.theme[col]
+            else: col = self.theme[feature]
+            try: feature = FEATURE_TRANSLATE[feature]
+            except KeyError: pass
+            features[feature] = col
+        formatted_type = repr(widget_type).split("'")[1].split(".")[-1]
+        styleguide.configure(f"{widget_name}.T{formatted_type}", **features)
+        widget.configure(style=f"{widget_name}.T{formatted_type}")
+
 
 def createBeer(application, data):
     """ Creates a new beer, adds it to the 'application.beers' list, and saves it to the JSON file """
@@ -266,34 +328,44 @@ def settingsPopup():
     submit = Button(settings_popup.popup, text="Submit", command=lambda: submitSettings(settings))
     submit.grid(row=len(application.options)+1, column=0, columnspan=2, sticky="s")
 
+def configure(event):
+    """ This method is called when the application.app window is resized """
+    width, height = event.width, event.height
+    pass
 
 def setupWindow():
     """ Sets up GUI with widgets """
+    global styleguide
     # Create basic window layout
     root = Application(title="Crown Brewery Recipe Manager")
 
+    # Create a style guide for ttk widgets
+    styleguide = Style()
+
+    # Create a custom menu
     menubar = Menu(root.app)
     root.app.config(menu=menubar)
     # Add more menu options here
+
     if SYSTEM == 'Darwin': # If the application is running on a Mac
+        styleguide.theme_use('classic')
         root.app.createcommand('tk::mac::ShowPreferences', settingsPopup)
     elif SYSTEM == 'Windows': # If the application is running on a Windows machine
         pass
     elif SYSTEM == 'Linux': # If the application is running on a Linux machine
         pass
 
-    titleframe = root.gridWidget(root.app, Frame, "frame_titleframe", row=0, column=0, highlightbackground="black",
-        highlightthickness=1, height=65,
-        gkws={"sticky":"new"})
-    bodyframe = root.gridWidget(root.app, Frame, "frame_bodyframe", row=1, column=0, highlightthickness=1,
-        gkws={"sticky":"sew"})
+    titleframe = root.gridWidget(root.app, Frame, "frame_titleframe", row=0, column=0, height=65,
+        gkws={"sticky":"new", "pady":15})
+    bodyframe = root.gridWidget(root.app, Frame, "frame_bodyframe", row=1, column=0, #highlightthickness=1,
+        gkws={"sticky":"sew", "ipady":5})
     createframe = root.gridWidget(bodyframe, LabelFrame, "frame_createframe", row=0, column=0, text="Create New Recipe",
-        highlightbackground="black", highlightthickness=1,
-        gkws={"sticky":"new"})
+        highlightbackground=root.theme["tint"], highlightthickness=1,
+        gkws={"sticky":"new", "pady":15})
     scrollcanvas = root.gridWidget(bodyframe, Canvas, "canvas_scroll", row=1, column=0,
         gkws={"sticky":"new"})
     viewframe = root.packWidget(scrollcanvas, LabelFrame, "frame_viewframe", text="View Recipes",
-        highlightbackground="black", highlightthickness=1,
+        highlightbackground=root.theme["tint"], highlightthickness=1,
         pkws={"fill":"both"})
 
     # Space the "title", "create" and "view" frames correctly
@@ -303,7 +375,7 @@ def setupWindow():
     # Set up the "title" frame
     root.gridWidget(titleframe, Label, "label_title", row=0, column=0, text="Recipe Manager", font=("Helvetica", 18, "bold"),
         gkws={"sticky":"nsew"})
-    root.gridWidget(titleframe, Label, "label_subtitle", row=1, column=0, text="by Christian A Loizou")
+    # root.gridWidget(titleframe, Label, "label_subtitle", row=1, column=0, text="by Christian A Loizou")
 
     # Set up the "create" frame
     newbeer = dict(
@@ -320,29 +392,30 @@ def setupWindow():
     newbeer["srm"].set("Choose an SRM value")
 
     root.gridWidget(createframe, Label, "label_beername", row=0, column=0, text="Enter beer name: ")
-    name = root.gridWidget(createframe, Entry, "entry_beername", row=0, column=1)
+    name = root.gridWidget(createframe, Entry, "entry_beername", row=0, column=1, gkws={"sticky":"e"})
     root.gridWidget(createframe, Label, "label_beertype", row=0, column=2, text="Enter beer type: ")
-    type = root.gridWidget(createframe, OptionMenu, "entry_beertype", newbeer["type"], *BEERTYPES, row=0, column=3)
+    type = root.gridWidget(createframe, OptionMenu, "entry_beertype", newbeer["type"], *BEERTYPES, row=0, column=3,
+        gkws={"sticky":"e"})
 
     root.gridWidget(createframe, Label, "label_servingtemp", row=1, column=0, text="Enter serving temp. (ºC): ")
-    servingtemp = root.gridWidget(createframe, Entry, "entry_servingtemp", row=1, column=1, width=10)
+    servingtemp = root.gridWidget(createframe, Entry, "entry_servingtemp", row=1, column=1, width=10, gkws={"sticky":"e"})
     root.gridWidget(createframe, Label, "label_abv", row=1, column=2, text="Enter ABV (%): ")
-    abv = root.gridWidget(createframe, Entry, "entry_abv", row=1, column=3, width=10)
+    abv = root.gridWidget(createframe, Entry, "entry_abv", row=1, column=3, width=10, gkws={"sticky":"e"})
 
     root.gridWidget(createframe, Label, "label_ibu", row=2, column=0, text="Enter IBU value: ")
-    ibu = root.gridWidget(createframe, Entry, "entry_ibu", row=2, column=1, width=10)
+    ibu = root.gridWidget(createframe, Entry, "entry_ibu", row=2, column=1, width=10, gkws={"sticky":"e"})
     root.gridWidget(createframe, Label, "label_srm", row=2, column=2, text="Enter SRM value: ")
-    srm = root.gridWidget(createframe, OptionMenu, "entry_srm", newbeer["srm"], *SRMSCALE, row=2, column=3)
+    srm = root.gridWidget(createframe, OptionMenu, "entry_srm", newbeer["srm"], *SRMSCALE, row=2, column=3, gkws={"sticky":"e"})
 
     root.gridWidget(createframe, Label, "label_gravity", row=3, column=0, text="Enter gravity: ")
-    gravity = root.gridWidget(createframe, Entry, "entry_gravity", row=3, column=1, width=10)
+    gravity = root.gridWidget(createframe, Entry, "entry_gravity", row=3, column=1, width=10, gkws={"sticky":"e"})
 
     submit = root.gridWidget(createframe, Button, "button_submitcreation", row=3, column=2, text="Create",
         command=lambda: createBeer(root, [name, newbeer["type"], servingtemp, abv, ibu, newbeer["srm"], gravity]),
         gkws={"columnspan":2, "sticky":"ew", "padx":5, "pady":5})
 
     # Set up the "view" frame
-    ROWSIZE = 3
+    ROWSIZE = 4
     for beernum, beer in enumerate(root.beers):
         buttonname = "button_"+beer._getformattedname()
         _row, _col = 1 + (beernum//ROWSIZE), beernum%ROWSIZE
@@ -350,9 +423,10 @@ def setupWindow():
         command=beer.displayInformation, gkws={"ipadx":35, "ipady":15, "padx":5, "pady":5})
 
     # Add an empty error message label for use later
-    root.gridWidget(root.app, Label, "label_errormessage", row=2, column=0, text="", fg="red",
+    root.gridWidget(root.app, Label, "label_errormessage", row=2, column=0, text="",
         gkws={"columnspan":5, "sticky":"s"})
 
+    root.app.bind("<Configure>", configure)
     return root
 
 if __name__ == "__main__":
