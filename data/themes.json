@@ -2,22 +2,22 @@
   "dark-blue": {
     "bg": "#252525",
     "fg": "#D4D4D4",
-    "dark":"#1E1E1E",
-    "light":"#333333",
+    "dark":"#333333",
+    "light":"#FFFFFF",
     "tint":"#007ACC"
   },
   "dark-orange": {
     "bg": "#393F4D",
     "fg": "#D4D4DC",
-    "dark":"#1D1E22",
-    "light":"#AAAAAA",
+    "dark":"#434343",
+    "light":"#FFFFFF",
     "tint":"#F96F0C"
   },
   "sky-blue": {
     "bg": "#0096FE",
     "fg": "#232323",
-    "dark":"#2B81E1",
-    "light":"#3545EF",
+    "dark":"#232323",
+    "light":"#5BC1F1",
     "tint":"#78FCFF"
   }
 }
