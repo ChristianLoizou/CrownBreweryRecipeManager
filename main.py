@@ -1,4 +1,4 @@
-import json, csv
+import csv, json, os
 from collections import defaultdict
 from tkinter import *
 from tkinter.ttk import Separator, Scrollbar
@@ -6,7 +6,6 @@ from tkinter.ttk import Separator, Scrollbar
 # A list of widgets that take ARGS instead of KWARGS
 # (ie. widgets that must take multiple positional variables on initialisation)
 COMPLEXWIDGETS = [OptionMenu]
-
 
 class BeerEncoder(json.JSONEncoder):
     """ An encoder class for saving Beer object data to JSON """
@@ -28,7 +27,7 @@ class Beer:
             # self.image = None
 
     def __repr__(self):
-        return f"<Beer: {self.name}>"
+        return f"<Beer ({self.type}): {self.name}>"
 
     def __str__(self):
         return repr(self)
@@ -41,6 +40,7 @@ class Beer:
         """ Creates a popup window showing the beer's data """
         popup = Tk()
         popup.title(self.name)
+        popup.resizable(width=False, height=False)
         Label(popup, text=self.name, font=("Helvetica", 18, "bold")).grid(row=0, column=0, columnspan=2)
         Separator(popup, orient=HORIZONTAL).grid(row=1, column=0, columnspan=2, sticky="ew")
         datapairs = [("name", self.name), ("beer type", self.type), ("abv", self.abv), ("serving temp.", self.servingtemp),
@@ -49,7 +49,8 @@ class Beer:
             t, d = datapairs[r-1]
             Label(popup, text=t.capitalize()).grid(row=r+1, column=0)
             Label(popup, text=d).grid(row=r+1, column=1)
-        Button(popup, text="Delete Beer", command=lambda: deleteBeer(self.name) ).grid(row=9, column=0, columnspan=2)
+        Separator(popup, orient=HORIZONTAL).grid(row=9, column=0, columnspan=2, sticky="ew")
+        Button(popup, text="Delete Beer", command=lambda: deleteBeer(self.name) ).grid(row=10, column=0, columnspan=2)
 
 class Application(Tk):
     """ Application object. Blueprint for the window shown to user, with custom methods to allow for easier adding of widgets"""
