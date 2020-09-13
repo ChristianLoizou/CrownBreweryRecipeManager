@@ -13,7 +13,7 @@ WIDGET_STYLES = {
     Label: ["fg", "bg"],
     Frame: ["bg"],
     Button: ["fg-black", "bg-white"],
-    Entry: ["fg-black", "bg-white"],
+    Entry: ["fg", "bg-white"],
     OptionMenu: ["fg-black", "bg-white"],
     LabelFrame: ["fg", "bg"],
     Canvas: ["bg"],
@@ -27,7 +27,7 @@ OVERRIDE_WIDGET_FEATURES = defaultdict(list, {
 
 # Dictionary of options saved to pickle file for persistance between application runs
 BASIC_PERSIST = {
-    "THEME": "sky-blue"
+    "THEME": "default"
 }
 
 class BeerEncoder(json.JSONEncoder):
@@ -73,12 +73,13 @@ class Beer:
         Separator(popup.popup, orient=HORIZONTAL).grid(row=9, column=0, columnspan=2, sticky="ew")
         Button(popup.popup, text="Delete Beer", command=lambda: deleteBeer(self.name) ).grid(row=10, column=0, columnspan=2)
 
-class PopupWindow(Tk):
+class PopupWindow(Toplevel):
     """ PopupWindow object. Blueprint for the popup windows shown when editing preferences, viewing beers, etc. """
-    def __init__(self, title, resizable=False):
-        self.popup = Tk()
+    def __init__(self, title, minsize=(None, None), resizable=False):
+        self.popup = Toplevel(application.app)
         self.popup.title(title)
         self.popup.resizable(width=resizable, height=resizable)
+        self.popup.minsize(*minsize)
         menubar = Menu(self.popup)
         self.popup.config(menu=menubar)
 
@@ -129,19 +130,10 @@ class Application(Tk):
         widget = widget_type(master, kwargs)
         for feature in WIDGET_STYLES[widget_type]:
             # overriding application theme for custom colour (ie. Entry boxes bg always white, fg always black)
-            if "-" in feature: feature, col = feature.split('-')
-            elif "=" in feature:
-                feature, col = feature.split("=")
-                col = self.theme[col]
-            else: col = self.theme[feature]
-            widget[feature] = col
+            self.override(widget, feature)
         if ( override := OVERRIDE_WIDGET_FEATURES[widget_name] ):
             for feature in override:
-                if "-" in feature: feature, col = feature.split("-")
-                elif "=" in feature:
-                    feature, col = feature.split("=")
-                    col = self.theme[col]
-                widget[feature] = col
+                for feature in override: self.override(widget, feature)
         if pkws: widget.pack(pkws)
         else: widget.pack()
         self.widgets[widget_name] = widget
@@ -156,29 +148,40 @@ class Application(Tk):
         else: widget = widget_type(master, kwargs)
         for feature in WIDGET_STYLES[widget_type]:
             # overriding application theme for custom colour (ie. Entry boxes bg always white, fg always black)
-            if "-" in feature: feature, col = feature.split('-')
-            elif "=" in feature:
-                feature, col = feature.split("=")
-                col = self.theme[col]
-            else: col = self.theme[feature]
-            widget[feature] = col
+            self.override(widget, feature)
         if ( override := OVERRIDE_WIDGET_FEATURES[widget_name] ):
-            for feature in override:
-                if "-" in feature: feature, col = feature.split("-")
-                elif "=" in feature:
-                    feature, col = feature.split("=")
-                    col = self.theme[col]
-                widget[feature] = col
+            for feature in override: self.override(widget, feature)
         if gkws: widget.grid(row=row, column=column, **gkws)
         else: widget.grid(row=row, column=column)
         self.widgets[widget_name] = widget
         return widget
+
+    def override(self, widget, feature):
+        if "-" in feature: feature, col = feature.split('-')
+        elif "=" in feature:
+            feature, col = feature.split("=")
+            try:
+                col = self.theme[col]
+            except KeyError as e:
+                print(f"Failed assigning '{col}' to {repr(widget)}[{feature}]")
+                print(f"No theme feature called '{col}'. Perhaps you meant to use a '-' instead of a '=' when defining overrides?")
+                quit()
+        else: col = self.theme[feature]
+        try:
+            widget[feature] = col
+        except TclError as e:
+            print(f"Failed assigning '{col}' to {repr(widget)}[{feature}]")
+            print(f"No theme feature called '{col}'. Perhaps you meant to use a '=' instead of a '-' when defining overrides?")
+            quit()
 
 def createBeer(application, data):
     """ Creates a new beer, adds it to the 'application.beers' list, and saves it to the JSON file """
     name = data.pop(0)
     if name.get().lower() in map(lambda b: b.name.lower(), application.beers):
         application.widgets["label_errormessage"]["text"] = "Error adding beer. Name already taken"
+        return False
+    elif name.get() == "":
+        application.widgets["label_errormessage"]["text"] = "Error adding beer. Enter valid name"
         return False
     else:
         headers = ["type", "servingtemp", "abv", "ibu", "srm", "gravity"]
@@ -232,16 +235,36 @@ def loadTheme(themename, path="data/themes.json"):
 
 def restartApplication(application):
     """ Destroys the TKinter Window, deletes the instance of Application class, and creates a new one from scratch """
-    try:
-        application.app.destroy()
-    except:
-        application.app.quit()
+    try: application.app.destroy()
+    except: application.app.quit()
     application = setupWindow()
     return application
 
+def submitSettings(settings):
+    """ Applies settings to the Application object, and saves them to the pickle """
+    global application
+    persist = {option:setting.get() for (option,setting) in settings.items()}
+    with open("data/persist.pk", "wb") as pickle_file:
+        pickle.dump(persist, pickle_file)
+    application = restartApplication(application)
+
 def settingsPopup():
     """ Manages the popup window shown when the user clicks 'Preferences' button """
-    settings_popup = PopupWindow("Settings")
+    # Add more settings here
+    settings_popup = PopupWindow("Settings", minsize=(200, 200), resizable=True)
+    settings = dict(
+        THEME = StringVar(value=application.theme_name)
+    )
+    val_dict = {
+        "THEME": list(sorted(THEMES))
+    }
+    Label(settings_popup.popup, text="").grid(row=0, column=0, columnspan=2)
+    Separator(settings_popup.popup, orient=HORIZONTAL).grid(row=1, column=0, columnspan=2, sticky="ew")
+    for (_row, (option, setting)) in enumerate(application.options.items()):
+        Label(settings_popup.popup, text=f"{option.lower().capitalize()}: ").grid(row=_row+1, column=0)
+        OptionMenu(settings_popup.popup, settings[option], *val_dict[option]).grid(row=_row+1, column=1)
+    submit = Button(settings_popup.popup, text="Submit", command=lambda: submitSettings(settings))
+    submit.grid(row=len(application.options)+1, column=0, columnspan=2, sticky="s")
 
 
 def setupWindow():
@@ -259,15 +282,15 @@ def setupWindow():
     elif SYSTEM == 'Linux': # If the application is running on a Linux machine
         pass
 
-    titleframe = root.gridWidget(root.app, Frame, "frame_titleframe", row=1, column=0, highlightbackground="black",
+    titleframe = root.gridWidget(root.app, Frame, "frame_titleframe", row=0, column=0, highlightbackground="black",
         highlightthickness=1, height=65,
         gkws={"sticky":"new"})
-    bodyframe = root.gridWidget(root.app, Frame, "frame_bodyframe", row=2, column=0, highlightthickness=1,
+    bodyframe = root.gridWidget(root.app, Frame, "frame_bodyframe", row=1, column=0, highlightthickness=1,
         gkws={"sticky":"sew"})
-    createframe = root.gridWidget(bodyframe, LabelFrame, "frame_createframe", row=1, column=0, text="Create New Recipe",
+    createframe = root.gridWidget(bodyframe, LabelFrame, "frame_createframe", row=0, column=0, text="Create New Recipe",
         highlightbackground="black", highlightthickness=1,
         gkws={"sticky":"new"})
-    scrollcanvas = root.gridWidget(bodyframe, Canvas, "canvas_scroll", row=2, column=0,
+    scrollcanvas = root.gridWidget(bodyframe, Canvas, "canvas_scroll", row=1, column=0,
         gkws={"sticky":"new"})
     viewframe = root.packWidget(scrollcanvas, LabelFrame, "frame_viewframe", text="View Recipes",
         highlightbackground="black", highlightthickness=1,
