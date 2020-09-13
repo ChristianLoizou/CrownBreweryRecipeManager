@@ -7,7 +7,8 @@ from tkinter.ttk import Separator, Scrollbar
 # (ie. widgets that must take multiple positional variables on initialisation)
 COMPLEXWIDGETS = [OptionMenu]
 
-# A dictionary of widget types and their possible styles
+# A dictionary of widget types and their possible styles ( '-' tag means override; all widgets of this type will override
+# the loaded application theme and keep their own style (for specific feature: bg, fg, etc... ))
 WIDGET_STYLES = {
     Label: ["fg", "bg"],
     Frame: ["bg"],
@@ -18,9 +19,14 @@ WIDGET_STYLES = {
     Canvas: ["bg"]
 }
 
+# A dictionary of widget names with features of the associated widget that should be overridden
+OVERRIDE_WIDGET_FEATURES = defaultdict(list, {
+    "label_errormessage": ["fg-red"]
+})
+
 # Dictionary of options saved to pickle file for persistance between application runs
 BASIC_PERSIST = {
-    "THEME": "dark-blue"
+    "THEME": "sky-blue"
 }
 
 class BeerEncoder(json.JSONEncoder):
@@ -71,14 +77,14 @@ class Beer:
 class Application(Tk):
     """ Application object. Blueprint for the window shown to user, with custom methods to allow for easier adding of widgets"""
     def __init__(self, /, *, title, \
-        size="830x600+400+200", jsonpath="data/beers.json", iconpath="assets/icon.ico"):
+        size="650x500+400+200", jsonpath="data/beers.json", iconpath="assets/icon.ico"):
         self.app = Tk()
         self.title, self.iconpath = title, iconpath
         self.options = self.loadPickle()
         self.rows, self.cols = 1, 1
         self.app.title(title)
         self.app.geometry(size)
-        self.app.minsize(830, 600)
+        self.app.minsize(650, 500)
         self.widgets = defaultdict(None)
         self.beers = loadBeers(jsonpath)
         self.theme_name = self.options["THEME"]
@@ -112,7 +118,22 @@ class Application(Tk):
     def packWidget(self, master, widget_type, widget_name, *args, pkws=None, **kwargs):
         """ Creates a new instance of widget with kwargs, packs onto master widget, saves the instance to Application.items
             and returns widget instance for use """
-        widget = widget_type(master, kwargs, fg=self.theme["fg"], bg=self.theme["bg"])
+        widget = widget_type(master, kwargs)
+        for feature in WIDGET_STYLES[widget_type]:
+            # overriding application theme for custom colour (ie. Entry boxes bg always white, fg always black)
+            if "-" in feature: feature, col = feature.split('-')
+            elif "=" in feature:
+                feature, col = feature.split("=")
+                col = self.theme[col]
+            else: col = self.theme[feature]
+            widget[feature] = col
+        if ( override := OVERRIDE_WIDGET_FEATURES[widget_name] ):
+            for feature in override:
+                if "-" in feature: feature, col = feature.split("-")
+                elif "=" in feature:
+                    feature, col = feature.split("=")
+                    col = self.theme[col]
+                widget[feature] = col
         if pkws: widget.pack(pkws)
         else: widget.pack()
         self.widgets[widget_name] = widget
@@ -126,10 +147,20 @@ class Application(Tk):
         if widget_type in COMPLEXWIDGETS: widget = widget_type(master, *args)
         else: widget = widget_type(master, kwargs)
         for feature in WIDGET_STYLES[widget_type]:
-            if "-" in feature: # overriding application theme for custom colour (ie. Entry boxes bg always white, fg always black)
-                feature, col = feature.split('-')
+            # overriding application theme for custom colour (ie. Entry boxes bg always white, fg always black)
+            if "-" in feature: feature, col = feature.split('-')
+            elif "=" in feature:
+                feature, col = feature.split("=")
+                col = self.theme[col]
             else: col = self.theme[feature]
             widget[feature] = col
+        if ( override := OVERRIDE_WIDGET_FEATURES[widget_name] ):
+            for feature in override:
+                if "-" in feature: feature, col = feature.split("-")
+                elif "=" in feature:
+                    feature, col = feature.split("=")
+                    col = self.theme[col]
+                widget[feature] = col
         if gkws: widget.grid(row=row, column=column, **gkws)
         else: widget.grid(row=row, column=column)
         self.widgets[widget_name] = widget
@@ -261,7 +292,6 @@ def setupWindow():
     submit = root.gridWidget(createframe, Button, "button_submitcreation", row=3, column=2, text="Create",
         command=lambda: createBeer(root, [name, newbeer["type"], servingtemp, abv, ibu, newbeer["srm"], gravity]),
         gkws={"columnspan":2, "sticky":"ew", "padx":5, "pady":5})
-    # submit.bind("<Return>", lambda: createBeer(root, [name, newbeer["type"], servingtemp, abv, ibu, newbeer["srm"], gravity]))
 
     # Set up the "view" frame
     ROWSIZE = 3
