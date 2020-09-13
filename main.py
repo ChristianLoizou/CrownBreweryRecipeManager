@@ -1,4 +1,4 @@
-import csv, json, pickle
+import csv, json, pickle, platform
 from collections import defaultdict
 from tkinter import *
 from tkinter.ttk import Separator, Scrollbar
@@ -16,7 +16,8 @@ WIDGET_STYLES = {
     Entry: ["fg-black", "bg-white"],
     OptionMenu: ["fg-black", "bg-white"],
     LabelFrame: ["fg", "bg"],
-    Canvas: ["bg"]
+    Canvas: ["bg"],
+    Menu: [] # No styling done to Menu widgets
 }
 
 # A dictionary of widget names with features of the associated widget that should be overridden
@@ -60,22 +61,29 @@ class Beer:
 
     def displayInformation(self):
         """ Creates a popup window showing the beer's data """
-        popup = Tk()
-        popup.title(self.name)
-        popup.resizable(width=False, height=False)
-        Label(popup, text=self.name, font=("Helvetica", 18, "bold")).grid(row=0, column=0, columnspan=2)
-        Separator(popup, orient=HORIZONTAL).grid(row=1, column=0, columnspan=2, sticky="ew")
+        popup = PopupWindow(self.name)
+        Label(popup.popup, text=self.name, font=("Helvetica", 18, "bold")).grid(row=0, column=0, columnspan=2)
+        Separator(popup.popup, orient=HORIZONTAL).grid(row=1, column=0, columnspan=2, sticky="ew")
         datapairs = [("name", self.name), ("beer type", self.type), ("abv", self.abv), ("serving temp.", self.servingtemp),
         ("gravity", self.gravity), ("ibu", self.ibu), ("srm", self.srm)]
         for r in range(1, 8):
             t, d = datapairs[r-1]
-            Label(popup, text=t.capitalize()).grid(row=r+1, column=0)
-            Label(popup, text=d).grid(row=r+1, column=1)
-        Separator(popup, orient=HORIZONTAL).grid(row=9, column=0, columnspan=2, sticky="ew")
-        Button(popup, text="Delete Beer", command=lambda: deleteBeer(self.name) ).grid(row=10, column=0, columnspan=2)
+            Label(popup.popup, text=t.capitalize()).grid(row=r+1, column=0)
+            Label(popup.popup, text=d).grid(row=r+1, column=1)
+        Separator(popup.popup, orient=HORIZONTAL).grid(row=9, column=0, columnspan=2, sticky="ew")
+        Button(popup.popup, text="Delete Beer", command=lambda: deleteBeer(self.name) ).grid(row=10, column=0, columnspan=2)
+
+class PopupWindow(Tk):
+    """ PopupWindow object. Blueprint for the popup windows shown when editing preferences, viewing beers, etc. """
+    def __init__(self, title, resizable=False):
+        self.popup = Tk()
+        self.popup.title(title)
+        self.popup.resizable(width=resizable, height=resizable)
+        menubar = Menu(self.popup)
+        self.popup.config(menu=menubar)
 
 class Application(Tk):
-    """ Application object. Blueprint for the window shown to user, with custom methods to allow for easier adding of widgets"""
+    """ Application object. Blueprint for the window shown to user, with custom methods to allow for easier adding of widgets """
     def __init__(self, /, *, title, \
         size="650x500+400+200", jsonpath="data/beers.json", iconpath="assets/icon.ico"):
         self.app = Tk()
@@ -215,9 +223,10 @@ def saveBeers(beers, path="data/beers.json"):
 
 def loadTheme(themename, path="data/themes.json"):
     """ Loads the theme needed for the application to be styled """
-    themes = json.load(open(path, "r")) # Load all themes
+    global THEMES
+    THEMES = json.load(open(path, "r")) # Load all themes
     try:
-        return themes[themename] # Return theme
+        return THEMES[themename] # Return theme
     except KeyError: # If theme doesn't exist
         return None
 
@@ -230,19 +239,35 @@ def restartApplication(application):
     application = setupWindow()
     return application
 
+def settingsPopup():
+    """ Manages the popup window shown when the user clicks 'Preferences' button """
+    settings_popup = PopupWindow("Settings")
+
+
 def setupWindow():
     """ Sets up GUI with widgets """
     # Create basic window layout
     root = Application(title="Crown Brewery Recipe Manager")
-    titleframe = root.gridWidget(root.app, Frame, "frame_titleframe", row=0, column=0, highlightbackground="black",
+
+    menubar = Menu(root.app)
+    root.app.config(menu=menubar)
+    # Add more menu options here
+    if SYSTEM == 'Darwin': # If the application is running on a Mac
+        root.app.createcommand('tk::mac::ShowPreferences', settingsPopup)
+    elif SYSTEM == 'Windows': # If the application is running on a Windows machine
+        pass
+    elif SYSTEM == 'Linux': # If the application is running on a Linux machine
+        pass
+
+    titleframe = root.gridWidget(root.app, Frame, "frame_titleframe", row=1, column=0, highlightbackground="black",
         highlightthickness=1, height=65,
         gkws={"sticky":"new"})
-    bodyframe = root.gridWidget(root.app, Frame, "frame_bodyframe", row=1, column=0, highlightthickness=1,
+    bodyframe = root.gridWidget(root.app, Frame, "frame_bodyframe", row=2, column=0, highlightthickness=1,
         gkws={"sticky":"sew"})
-    createframe = root.gridWidget(bodyframe, LabelFrame, "frame_createframe", row=0, column=0, text="Create New Recipe",
+    createframe = root.gridWidget(bodyframe, LabelFrame, "frame_createframe", row=1, column=0, text="Create New Recipe",
         highlightbackground="black", highlightthickness=1,
         gkws={"sticky":"new"})
-    scrollcanvas = root.gridWidget(bodyframe, Canvas, "canvas_scroll", row=1, column=0,
+    scrollcanvas = root.gridWidget(bodyframe, Canvas, "canvas_scroll", row=2, column=0,
         gkws={"sticky":"new"})
     viewframe = root.packWidget(scrollcanvas, LabelFrame, "frame_viewframe", text="View Recipes",
         highlightbackground="black", highlightthickness=1,
@@ -308,6 +333,6 @@ def setupWindow():
     return root
 
 if __name__ == "__main__":
+    SYSTEM = platform.system() # Gets the system of the machine running the application (ie. MAC, WINDOWS or LINUX)
     application = setupWindow()
-    # print(f"\n{application}\n")
     application.app.mainloop()
