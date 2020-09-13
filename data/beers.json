@@ -30,5 +30,13 @@
     "ibu": "25",
     "srm": "Amber-Brown",
     "servingtemp": "4"
+  },
+  "Crown Doppelbock": {
+    "type": "Doppelbock",
+    "servingtemp": "8",
+    "abv": "8",
+    "ibu": "20",
+    "srm": "Pale Amber",
+    "gravity": "6.2"
   }
 }
