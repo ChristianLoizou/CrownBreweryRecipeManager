@@ -1,0 +1,16 @@
+{
+  "dark-blue": {
+    "bg": "#252525",
+    "fg": "#D4D4D4",
+    "dark":"#1E1E1E",
+    "light":"#333333",
+    "tint":"#007ACC"
+  },
+  "dark-orange": {
+    "bg": "#393F4D",
+    "fg": "#D4D4DC",
+    "dark":"#1D1E22",
+    "light":"#AAAAAA",
+    "tint":"#F96F0C"
+  }
+}
