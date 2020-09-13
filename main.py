@@ -1,11 +1,27 @@
-import csv, json, os
+import csv, json, pickle
 from collections import defaultdict
 from tkinter import *
 from tkinter.ttk import Separator, Scrollbar
 
-# A list of widgets that take ARGS instead of KWARGS
+# A list of widget types that take ARGS instead of KWARGS
 # (ie. widgets that must take multiple positional variables on initialisation)
 COMPLEXWIDGETS = [OptionMenu]
+
+# A dictionary of widget types and their possible styles
+WIDGET_STYLES = {
+    Label: ["fg", "bg"],
+    Frame: ["bg"],
+    Button: ["fg-black", "bg-white"],
+    Entry: ["fg-black", "bg-white"],
+    OptionMenu: ["fg-black", "bg-white"],
+    LabelFrame: ["fg", "bg"],
+    Canvas: ["bg"]
+}
+
+# Dictionary of options saved to pickle file for persistance between application runs
+BASIC_PERSIST = {
+    "THEME": "dark-blue"
+}
 
 class BeerEncoder(json.JSONEncoder):
     """ An encoder class for saving Beer object data to JSON """
@@ -54,26 +70,49 @@ class Beer:
 
 class Application(Tk):
     """ Application object. Blueprint for the window shown to user, with custom methods to allow for easier adding of widgets"""
-    def __init__(self, /, *, title, size="830x600+400+200", jsonpath="data/beers.json", iconpath="assets/icon.ico"):
+    def __init__(self, /, *, title, \
+        size="830x600+400+200", jsonpath="data/beers.json", iconpath="assets/icon.ico"):
         self.app = Tk()
         self.title, self.iconpath = title, iconpath
+        self.options = self.loadPickle()
         self.rows, self.cols = 1, 1
         self.app.title(title)
         self.app.geometry(size)
         self.app.minsize(830, 600)
         self.widgets = defaultdict(None)
         self.beers = loadBeers(jsonpath)
+        self.theme_name = self.options["THEME"]
+        self.theme = self.applyTheme()
 
     def __repr__(self):
-        return f"<Application: (title={repr(self.title)}, children={len(self.app.children)}, ...)>"
+        return f"<Application: {self.title}>"
 
     def __str__(self):
         return repr(self)
 
+    def loadPickle(self, persist="data/persist.pk"):
+        """ Loads pickled persistant data (ie. options kept between program instances) from file, unpickles and returns """
+        try:
+            with open(persist, "rb") as pckl_file:
+                persist_data = pickle.load(pckl_file)
+        except FileNotFoundError:
+            with open(persist, "wb") as pckl_file:
+                pickle.dump(BASIC_PERSIST, pckl_file)
+                persist_data = BASIC_PERSIST
+        return persist_data
+
+    def applyTheme(self, override=None):
+        """ Applies the loaded theme to the application window. If the theme is default, do nothing and return """
+        if self.theme_name == "default": return None # If theme is default
+        loaded_theme = loadTheme(self.theme_name)
+        if loaded_theme == None: return None # If theme doesn't exist
+        self.app["bg"] = loaded_theme["bg"]
+        return loaded_theme
+
     def packWidget(self, master, widget_type, widget_name, *args, pkws=None, **kwargs):
         """ Creates a new instance of widget with kwargs, packs onto master widget, saves the instance to Application.items
             and returns widget instance for use """
-        widget = widget_type(master, kwargs)
+        widget = widget_type(master, kwargs, fg=self.theme["fg"], bg=self.theme["bg"])
         if pkws: widget.pack(pkws)
         else: widget.pack()
         self.widgets[widget_name] = widget
@@ -86,6 +125,11 @@ class Application(Tk):
         if column > self.cols: self.cols = column
         if widget_type in COMPLEXWIDGETS: widget = widget_type(master, *args)
         else: widget = widget_type(master, kwargs)
+        for feature in WIDGET_STYLES[widget_type]:
+            if "-" in feature: # overriding application theme for custom colour (ie. Entry boxes bg always white, fg always black)
+                feature, col = feature.split('-')
+            else: col = self.theme[feature]
+            widget[feature] = col
         if gkws: widget.grid(row=row, column=column, **gkws)
         else: widget.grid(row=row, column=column)
         self.widgets[widget_name] = widget
@@ -112,8 +156,8 @@ def createBeer(application, data):
         application = restartApplication(application)
 
 def deleteBeer(beername):
-    global application
     """ Removes the beer with the given name from the beers list, saves the list, then reloads the application """
+    global application
     application.beers = filter(lambda b: b.name != beername, application.beers)
     saveBeers(application.beers)
     application = restartApplication(application)
@@ -137,6 +181,14 @@ def saveBeers(beers, path="data/beers.json"):
         del(beer["name"])
         saveJSON[name] = beer
     json.dump(saveJSON, open(path, "w"), indent=2)
+
+def loadTheme(themename, path="data/themes.json"):
+    """ Loads the theme needed for the application to be styled """
+    themes = json.load(open(path, "r")) # Load all themes
+    try:
+        return themes[themename] # Return theme
+    except KeyError: # If theme doesn't exist
+        return None
 
 def restartApplication(application):
     """ Destroys the TKinter Window, deletes the instance of Application class, and creates a new one from scratch """
