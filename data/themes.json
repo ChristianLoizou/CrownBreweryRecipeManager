@@ -1,30 +1,1430 @@
 {
-  "default": {
+  "Default": {
     "bg": "#BBBBBB",
     "fg": "#000000",
     "dark":"#222222",
     "light":"#CCCCCC",
     "tint":"#111111"
   },
-  "dark-blue": {
+  "Dark blue": {
     "bg": "#252525",
     "fg": "#D4D4D4",
     "dark":"#333333",
     "light":"#FFFFFF",
     "tint":"#007ACC"
   },
-  "dark-orange": {
+  "Dark orange": {
     "bg": "#393F4D",
     "fg": "#D4D4DC",
     "dark":"#434343",
     "light":"#FFFFFF",
     "tint":"#F96F0C"
   },
-  "sky-blue": {
+  "Sky blue": {
     "fg": "#281621",
     "bg": "#c8dceb",
     "dark": "#633d1c",
     "light": "#83b4c8",
     "tint": "#1a36a1"
+  },
+  "Yellow Grunge": {
+    "fg": "#f8e000",
+    "bg": "#e0a800",
+    "dark": "#d09800",
+    "light": "#c08800",
+    "tint": "#b07000"
+  },
+  "Fire Sunset": {
+    "fg": "#a83830",
+    "bg": "#c85848",
+    "dark": "#f87030",
+    "light": "#f89038",
+    "tint": "#f0a860"
+  },
+  "Olympic Forest": {
+    "fg": "#203020",
+    "bg": "#306040",
+    "dark": "#487058",
+    "light": "#588878",
+    "tint": "#689088"
+  },
+  "Marca Personal": {
+    "fg": "#00204c",
+    "bg": "#006cff",
+    "dark": "#eb4a27",
+    "light": "#bbbbbb",
+    "tint": "#aaaaaa"
+  },
+  "Grey Grunge": {
+    "fg": "#e0e0e0",
+    "bg": "#d0d0d0",
+    "dark": "#c0c0c0",
+    "light": "#b0b0b0",
+    "tint": "#a0a0a0"
+  },
+  "Woodstock Sunset": {
+    "fg": "#f89800",
+    "bg": "#f88000",
+    "dark": "#f87000",
+    "light": "#f86800",
+    "tint": "#f85800"
+  },
+  "Step It On": {
+    "fg": "#e8e0a0",
+    "bg": "#8898b8",
+    "dark": "#909848",
+    "light": "#684040",
+    "tint": "#a06070"
+  },
+  "Greener": {
+    "fg": "#90b860",
+    "bg": "#88b050",
+    "dark": "#78a848",
+    "light": "#70a040",
+    "tint": "#508028"
+  },
+  "Cuadros": {
+    "fg": "#f0d090",
+    "bg": "#a0b8e0",
+    "dark": "#e8e8d8",
+    "light": "#e8c880",
+    "tint": "#c0b8b0"
+  },
+  "Metaphysical Graffitti": {
+    "fg": "#204010",
+    "bg": "#c0a0a8",
+    "dark": "#984870",
+    "light": "#304830",
+    "tint": "#889068"
+  },
+  "Pop Of Red": {
+    "fg": "#e8e5e5",
+    "bg": "#c8c8c8",
+    "dark": "#c81717",
+    "light": "#9d0b0b",
+    "tint": "#000"
+  },
+  "Dzonecolors": {
+    "fg": "#ff7e7e",
+    "bg": "#7bebb8",
+    "dark": "#38d9d4",
+    "light": "#8898f6",
+    "tint": "#fdb46a"
+  },
+  "Wild Honey": {
+    "fg": "#fbd4a4",
+    "bg": "#fbdda4",
+    "dark": "#fbe6a4",
+    "light": "#fbefa4",
+    "tint": "#fbf7a4"
+  },
+  "Mandate Brand Colors (blood Orange)": {
+    "fg": "#db4437",
+    "bg": "#fff",
+    "dark": "#aaaeb0",
+    "light": "#445055",
+    "tint": "#333"
+  },
+  "Mandate Brand Colors (burnt Orange)": {
+    "fg": "#c50",
+    "bg": "#fff",
+    "dark": "#aaaeb0",
+    "light": "#445055",
+    "tint": "#333"
+  },
+  "Mariele": {
+    "fg": "#480472",
+    "bg": "#053d6c",
+    "dark": "#880993",
+    "light": "#0780aa",
+    "tint": "#dbb90b"
+  },
+  "Secondary Bold": {
+    "fg": "#f00",
+    "bg": "#0ff",
+    "dark": "#60c",
+    "light": "#006",
+    "tint": "#09f"
+  },
+  "Primary Bold": {
+    "fg": "#00c",
+    "bg": "#ff0",
+    "dark": "#9c0",
+    "light": "#f0f",
+    "tint": "#f60"
+  },
+  "Moist Rock": {
+    "fg": "#836239",
+    "bg": "#5c4c24",
+    "dark": "#56b893",
+    "light": "#276d6c",
+    "tint": "#165b60"
+  },
+  "Cardio": {
+    "fg": "#1241a0",
+    "bg": "#20bf55",
+    "dark": "#a1dcae",
+    "light": "#c4c4c4",
+    "tint": "#009a3b"
+  },
+  "Thaal": {
+    "fg": "#594e4e",
+    "bg": "#6c996e",
+    "dark": "#909090",
+    "light": "#841515",
+    "tint": "#b57e1e"
+  },
+  "Dirty Red Grunge": {
+    "fg": "#680000",
+    "bg": "#900808",
+    "dark": "#a01010",
+    "light": "#b01820",
+    "tint": "#c83030"
+  },
+  "Red Grunge": {
+    "fg": "#c80808",
+    "bg": "#b00808",
+    "dark": "#880808",
+    "light": "#600808",
+    "tint": "#480808"
+  },
+  "Abeir": {
+    "fg": "#148a48",
+    "bg": "#08bb00",
+    "dark": "#96ff00",
+    "light": "#ffb500",
+    "tint": "#a29191"
+  },
+  "Grunge Color Progression": {
+    "fg": "#902808",
+    "bg": "#084040",
+    "dark": "#308088",
+    "light": "#e8c038",
+    "tint": "#c8d898"
+  },
+  "Junbi": {
+    "fg": "#e5a435",
+    "bg": "#866210",
+    "dark": "#9cb1c5",
+    "light": "#b44218",
+    "tint": "#09761c"
+  },
+  "Colorful Grunge": {
+    "fg": "#a0c0d8",
+    "bg": "#e0c8d0",
+    "dark": "#b85860",
+    "light": "#5878a0",
+    "tint": "#600810"
+  },
+  "Abstract Grunge": {
+    "fg": "#281820",
+    "bg": "#a8a090",
+    "dark": "#e0d8c0",
+    "light": "#807868",
+    "tint": "#908870"
+  },
+  "Emeraldlicious": {
+    "fg": "#008702",
+    "bg": "#00b81f",
+    "dark": "#00d42e",
+    "light": "#29d63e",
+    "tint": "#46db48"
+  },
+  "Perfectly Pinkalicious": {
+    "fg": "#ffa3f2",
+    "bg": "#ef79f0",
+    "dark": "#ff4dc2",
+    "light": "#ff1ed4",
+    "tint": "#ff00c1"
+  },
+  "Gorgeous Green Grass": {
+    "fg": "#73ff54",
+    "bg": "#1fd622",
+    "dark": "#0f1",
+    "light": "#2cd849",
+    "tint": "#56ec1a"
+  },
+  "Pretty Pink And Purple Pastels": {
+    "fg": "#f4b1b1",
+    "bg": "#ffa9d9",
+    "dark": "#e19bea",
+    "light": "#c49eec",
+    "tint": "#a083ff"
+  },
+  "Pheonix": {
+    "fg": "#f00",
+    "bg": "#ff4d00",
+    "dark": "#ff8100",
+    "light": "#ffce00",
+    "tint": "#fdff00"
+  },
+  "Pretty Purples": {
+    "fg": "#9600ff",
+    "bg": "#db76ff",
+    "dark": "#520081",
+    "light": "#dc38f0",
+    "tint": "#b000ff"
+  },
+  "Cupcake Land": {
+    "fg": "#d868ee",
+    "bg": "#f9f375",
+    "dark": "#f975be",
+    "light": "#a5baf2",
+    "tint": "#84f0f9"
+  },
+  "Rainbow Doodle": {
+    "fg": "#f9b6e2",
+    "bg": "#ecf693",
+    "dark": "#8ef68b",
+    "light": "#b6e8ec",
+    "tint": "#ca9bf2"
+  },
+  "Light Red To Dark Red - By Jelly": {
+    "fg": "#f9aeae",
+    "bg": "#fb6767",
+    "dark": "#ea5252",
+    "light": "#d62929",
+    "tint": "#c50000"
+  },
+  "Pastel Colours - By Jelly": {
+    "fg": "#f0bee4",
+    "bg": "#aee5a2",
+    "dark": "#eee08d",
+    "light": "#a6f4fb",
+    "tint": "#ffbd90"
+  },
+  "Gzoz": {
+    "fg": "#002131",
+    "bg": "#00486c",
+    "dark": "#006d95",
+    "light": "#0087aa",
+    "tint": "#00a1be"
+  },
+  "Green And Yellow Uniform": {
+    "fg": "#fff",
+    "bg": "#bab419",
+    "dark": "#658b11",
+    "light": "#0c4203",
+    "tint": "#000"
+  },
+  "Red Uniform": {
+    "fg": "#fbfbfb",
+    "bg": "#ae1d1d",
+    "dark": "#900f0f",
+    "light": "#7e0808",
+    "tint": "#020202"
+  },
+  "Blue Uniform": {
+    "fg": "#fdf9f9",
+    "bg": "#4a9ec7",
+    "dark": "#2683bd",
+    "light": "#3970ba",
+    "tint": "#000"
+  },
+  "Green Uniform": {
+    "fg": "#eaece4",
+    "bg": "#adb881",
+    "dark": "#7f8d47",
+    "light": "#606d2d",
+    "tint": "#000"
+  },
+  "Dark Blue Grey Club": {
+    "fg": "#fff",
+    "bg": "#eee",
+    "dark": "#c3c3cb",
+    "light": "#17206d",
+    "tint": "#1c3953"
+  },
+  "Theabbie": {
+    "fg": "#4cc17f",
+    "bg": "#daa836",
+    "dark": "#469bb8",
+    "light": "#d15f22",
+    "tint": "#6cbe3c"
+  },
+  "Hanahaki Peonies": {
+    "fg": "#ffbbe4",
+    "bg": "#ffccf8",
+    "dark": "#ffd8fb",
+    "light": "#fde9ff",
+    "tint": "#fff2fe"
+  },
+  "Mint Frost": {
+    "fg": "#36dda6",
+    "bg": "#56eab2",
+    "dark": "#74f6c5",
+    "light": "#a5f4da",
+    "tint": "#c4fbe6"
+  },
+  "Cool Soft": {
+    "fg": "#e17fba",
+    "bg": "#5bb0b2",
+    "dark": "#d45789",
+    "light": "#bbbbbb",
+    "tint": "#aaaaaa"
+  },
+  "Pompompurin": {
+    "fg": "#7b3933",
+    "bg": "#f6f2af",
+    "dark": "#7f292c",
+    "light": "#ee8484",
+    "tint": "#542f31"
+  },
+  "Creme Caramel": {
+    "fg": "#fffedd",
+    "bg": "#e2cc92",
+    "dark": "#d1a650",
+    "light": "#da7a24",
+    "tint": "#c74e1a"
+  },
+  "Dirty Water": {
+    "fg": "#d0eee1",
+    "bg": "#d6d8d4",
+    "dark": "#cec1ba",
+    "light": "#b6a59e",
+    "tint": "#988585"
+  },
+  "Dark Purple To Green Gradient": {
+    "fg": "#451460",
+    "bg": "#335172",
+    "dark": "#39817f",
+    "light": "#62a75c",
+    "tint": "#a9c12a"
+  },
+  "Golden Girl": {
+    "fg": "#b65e16",
+    "bg": "#fdfdfd",
+    "dark": "#d89c0a",
+    "light": "#a52d1f",
+    "tint": "#ddbd4b"
+  },
+  "Bold Girl": {
+    "fg": "#020202",
+    "bg": "#f6f2f2",
+    "dark": "#ec1b7a",
+    "light": "#d0a520",
+    "tint": "#f4709e"
+  },
+  "Shadowed Rainbow": {
+    "fg": "#4d0b03",
+    "bg": "#7a550f",
+    "dark": "#888908",
+    "light": "#0d7e15",
+    "tint": "#0b0851"
+  },
+  "Muted Cool": {
+    "fg": "#6d8b92",
+    "bg": "#78709a",
+    "dark": "#7a9eab",
+    "light": "#807183",
+    "tint": "#aea3ba"
+  },
+  "Warm Fall": {
+    "fg": "#d47332",
+    "bg": "#6d3535",
+    "dark": "#a14f34",
+    "light": "#9c6700",
+    "tint": "#d89f14"
+  },
+  "Gui Colour Palette": {
+    "fg": "#027cff",
+    "bg": "#38a851",
+    "dark": "#ffc108",
+    "light": "#d73343",
+    "tint": "#393e43"
+  },
+  "Alboet": {
+    "fg": "#0237cf",
+    "bg": "#01186b",
+    "dark": "#58c411",
+    "light": "#fff",
+    "tint": "#000"
+  },
+  "The Titania": {
+    "fg": "#afcec8",
+    "bg": "#d1ff73",
+    "dark": "#edf4f6",
+    "light": "#fffbfb",
+    "tint": "#e0f3f9"
+  },
+  "Typhoon Kick": {
+    "fg": "#212227",
+    "bg": "#494949",
+    "dark": "#69d8cc",
+    "light": "#0ec0af",
+    "tint": "#07728e"
+  },
+  "Strong Red And Blue": {
+    "fg": "#eeeeee",
+    "bg": "#dddddd",
+    "dark": "#b21111",
+    "light": "#08146d",
+    "tint": "#aaaaaa"
+  },
+  "Hydroshift": {
+    "fg": "#0e68b3",
+    "bg": "#037ec3",
+    "dark": "#0290cf",
+    "light": "#07a5dc",
+    "tint": "#6bcbeb"
+  },
+  "Hint Of Bright Red": {
+    "fg": "#eeeeee",
+    "bg": "#ddd",
+    "dark": "#b21111",
+    "light": "#bbbbbb",
+    "tint": "#aaaaaa"
+  },
+  "Reds And Blues": {
+    "fg": "#eeeeee",
+    "bg": "#d84848",
+    "dark": "#8b0c0c",
+    "light": "#1885c7",
+    "tint": "#0b74e1"
+  },
+  "Excel Colors": {
+    "fg": "#f66",
+    "bg": "#ffc966",
+    "dark": "#66b266",
+    "light": "#66a9d9",
+    "tint": "#a982c6"
+  },
+  "Greys And Greens": {
+    "fg": "#eeeeee",
+    "bg": "#85e3b1",
+    "dark": "#42c27e",
+    "light": "#0b4225",
+    "tint": "#aaaaaa"
+  },
+  "Basketball Info Graphic": {
+    "fg": "#e75719",
+    "bg": "#9c380d",
+    "dark": "#241aa5",
+    "light": "#08052f",
+    "tint": "#d0d0d0"
+  },
+  "Piedmont Palette 2": {
+    "fg": "#bdd2e3",
+    "bg": "#ec5829",
+    "dark": "#cccccc",
+    "light": "#bbbbbb",
+    "tint": "#aaaaaa"
+  },
+  "Violer": {
+    "fg": "#602cbc",
+    "bg": "#7849d3",
+    "dark": "#5f14d0",
+    "light": "#490ecc",
+    "tint": "#6e23b1"
+  },
+  "Apache Helicopter": {
+    "fg": "#a66058",
+    "bg": "#bc9063",
+    "dark": "#bfb197",
+    "light": "#676763",
+    "tint": "#4b4b46"
+  },
+  "Stagehand": {
+    "fg": "#796d83",
+    "bg": "#bf757e",
+    "dark": "#84b6b0",
+    "light": "#a1b6a3",
+    "tint": "#eed2c2"
+  },
+  "Scheherazade": {
+    "fg": "#3a5b81",
+    "bg": "#7e4a73",
+    "dark": "#894d65",
+    "light": "#905f66",
+    "tint": "#b2a498"
+  },
+  "Sapsali": {
+    "fg": "#fff",
+    "bg": "#a3a5b0",
+    "dark": "#d25a5a",
+    "light": "#ecb878",
+    "tint": "#784c27"
+  },
+  "Electric Dream": {
+    "fg": "#e9cec3",
+    "bg": "#f5ecd4",
+    "dark": "#cdd8dc",
+    "light": "#b7cddb",
+    "tint": "#d0cedf"
+  },
+  "The Velvet Of The Night": {
+    "fg": "#7231f4",
+    "bg": "#6119ee",
+    "dark": "#4317d0",
+    "light": "#2709ae",
+    "tint": "#1f158d"
+  },
+  "Soft Swampwater": {
+    "fg": "#b4eca2",
+    "bg": "#78dd84",
+    "dark": "#46bf73",
+    "light": "#1aa973",
+    "tint": "#0a7787"
+  },
+  "Araminta": {
+    "fg": "#efd7ca",
+    "bg": "#dfffe6",
+    "dark": "#8bffaa",
+    "light": "#242424",
+    "tint": "#4e634c"
+  },
+  "Angel Williams": {
+    "fg": "#feeed7",
+    "bg": "#ac5e23",
+    "dark": "#b3e7fb",
+    "light": "#ffb9de",
+    "tint": "#ffffd8"
+  },
+  "Hihumanities Grants Color Palette": {
+    "fg": "#9fd7d5",
+    "bg": "#9fd7b9",
+    "dark": "#9fa1d7",
+    "light": "#d7d59f",
+    "tint": "#844987"
+  },
+  "Sf Brand 1": {
+    "fg": "#31394d",
+    "bg": "#009384",
+    "dark": "#fff",
+    "light": "#fff",
+    "tint": "#fff"
+  },
+  "Sf Brand 2": {
+    "fg": "#af4e4c",
+    "bg": "#9fc3cd",
+    "dark": "#292e47",
+    "light": "#f0a94f",
+    "tint": "#fff"
+  },
+  "Sf Brand 3": {
+    "fg": "#af4e4c",
+    "bg": "#813e3a",
+    "dark": "#525632",
+    "light": "#f5a22f",
+    "tint": "#f6bb86"
+  },
+  "Bright N Outta Sight": {
+    "fg": "#f82178",
+    "bg": "#24b4a9",
+    "dark": "#4b3f3f",
+    "light": "#fff",
+    "tint": "#aaaaaa"
+  },
+  "Hush Now": {
+    "fg": "#685de7",
+    "bg": "#1f3fdd",
+    "dark": "#1753f4",
+    "light": "#8d41f0",
+    "tint": "#8825dd"
+  },
+  "Ghostly Purples And Greens": {
+    "fg": "#6c0084",
+    "bg": "#5e3569",
+    "dark": "#594a5e",
+    "light": "#4e7548",
+    "tint": "#32df11"
+  },
+  "Wetwo": {
+    "fg": "#2d2a39",
+    "bg": "#53919a",
+    "dark": "#e1ce93",
+    "light": "#ff9400",
+    "tint": "#aaaaaa"
+  },
+  "Purpie": {
+    "fg": "#fbbed2",
+    "bg": "#d6809f",
+    "dark": "#bf85b9",
+    "light": "#e5d0b0",
+    "tint": "#a9a9a9"
+  },
+  "Elle Woods": {
+    "fg": "#ff008d",
+    "bg": "#ff68b4",
+    "dark": "#ffaedf",
+    "light": "#ff83e7",
+    "tint": "#ff56bc"
+  },
+  "Hubba Bubba": {
+    "fg": "#ff7eac",
+    "bg": "#ff97bc",
+    "dark": "#ffb1cd",
+    "light": "#ffcadd",
+    "tint": "#ffe4ed"
+  },
+  "Virginia Tech": {
+    "fg": "#68293b",
+    "bg": "#fff",
+    "dark": "#cf441f",
+    "light": "#000",
+    "tint": "#938c89"
+  },
+  "Habitar Urbano": {
+    "fg": "#eeede7",
+    "bg": "#868b8e",
+    "dark": "#e7d2cc",
+    "light": "#b9b7bd",
+    "tint": "#aaaaaa"
+  },
+  "Cielo Atmosphere": {
+    "fg": "#3058d0",
+    "bg": "#3078d8",
+    "dark": "#807098",
+    "light": "#a0a098",
+    "tint": "#d8b868"
+  },
+  "Liquid  Undertow": {
+    "fg": "#302850",
+    "bg": "#604060",
+    "dark": "#a888d0",
+    "light": "#7060b0",
+    "tint": "#985868"
+  },
+  "My Rose Flower": {
+    "fg": "#80c870",
+    "bg": "#78b028",
+    "dark": "#409030",
+    "light": "#a80040",
+    "tint": "#e84890"
+  },
+  "Blue Stripes": {
+    "fg": "#0090f8",
+    "bg": "#0080f8",
+    "dark": "#0070f8",
+    "light": "#0060f8",
+    "tint": "#0050f8"
+  },
+  "Color Tide": {
+    "fg": "#481090",
+    "bg": "#a868f8",
+    "dark": "#a02018",
+    "light": "#b02018",
+    "tint": "#c02018"
+  },
+  "My Grey Scale": {
+    "fg": "#d0d0d0",
+    "bg": "#a8a8a8",
+    "dark": "#808080",
+    "light": "#484848",
+    "tint": "#181818"
+  },
+  "Early Sunrise": {
+    "fg": "#901838",
+    "bg": "#d84030",
+    "dark": "#f05020",
+    "light": "#f89830",
+    "tint": "#f8b838"
+  },
+  "Pc Mayor": {
+    "fg": "#6ecbb8",
+    "bg": "#0075c9",
+    "dark": "#0d2240",
+    "light": "#161b29",
+    "tint": "#d9272e"
+  },
+  "Suncity": {
+    "fg": "#edcf89",
+    "bg": "#d5b44f",
+    "dark": "#ca9a1c",
+    "light": "#ca5f21",
+    "tint": "#bd6900"
+  },
+  "Asset Tracking": {
+    "fg": "#cc3232",
+    "bg": "#db7b2b",
+    "dark": "#2dc937",
+    "light": "#3f5f90",
+    "tint": "#aaaaaa"
+  },
+  "Rufous Hummingbird Female": {
+    "fg": "#6c6956",
+    "bg": "#e8e4c9",
+    "dark": "#a37063",
+    "light": "#ccd65b",
+    "tint": "#323232"
+  },
+  "Hhd Color Palette": {
+    "fg": "#26c79b",
+    "bg": "#13634d",
+    "dark": "#9b26c7",
+    "light": "#c79b26",
+    "tint": "#26a3c7"
+  },
+  "Dolce Watanabe": {
+    "fg": "#edbf41",
+    "bg": "#f7e37a",
+    "dark": "#b39455",
+    "light": "#272727",
+    "tint": "#263b81"
+  },
+  "Blue Bar": {
+    "fg": "#1b1b1b",
+    "bg": "#e8e8e8",
+    "dark": "#c7f5ee",
+    "light": "#7ae2dd",
+    "tint": "#14bdad"
+  },
+  "Fresh Ice Cream": {
+    "fg": "#212121",
+    "bg": "#e8dee4",
+    "dark": "#d38fb2",
+    "light": "#96d3ca",
+    "tint": "#269b8a"
+  },
+  "Shinobu Seki": {
+    "fg": "#75f7f1",
+    "bg": "#ea80f3",
+    "dark": "#f06",
+    "light": "#eaeff5",
+    "tint": "#77838a"
+  },
+  "Lois Two": {
+    "fg": "#998068",
+    "bg": "#424b66",
+    "dark": "#7883a2",
+    "light": "#995863",
+    "tint": "#771a32"
+  },
+  "Weaponspalette": {
+    "fg": "#a6660d",
+    "bg": "#cac3c3",
+    "dark": "#a2a1a1",
+    "light": "#8c8686",
+    "tint": "#686868"
+  },
+  "70s Vibes": {
+    "fg": "#9f544c",
+    "bg": "#5688ae",
+    "dark": "#ccc6b6",
+    "light": "#779276",
+    "tint": "#9f9f9f"
+  },
+  "Dark Brown Hair": {
+    "fg": "#464747",
+    "bg": "#564f52",
+    "dark": "#68544e",
+    "light": "#725a52",
+    "tint": "#7b6054"
+  },
+  "Sage Wine": {
+    "fg": "#eceeed",
+    "bg": "#e2dbd6",
+    "dark": "#759c8a",
+    "light": "#415a4e",
+    "tint": "#5b0000"
+  },
+  "Purple Sage": {
+    "fg": "#efeeee",
+    "bg": "#dfd8d2",
+    "dark": "#759c8a",
+    "light": "#415a4e",
+    "tint": "#5f555a"
+  },
+  "Greenish Blue Haze": {
+    "fg": "#eeefef",
+    "bg": "#ede2d1",
+    "dark": "#98aea9",
+    "light": "#526e6e",
+    "tint": "#685b5e"
+  },
+  "Hunter Wine": {
+    "fg": "#fff",
+    "bg": "#ece1d0",
+    "dark": "#93b793",
+    "light": "#4c674c",
+    "tint": "#5b0000"
+  },
+  "Limey": {
+    "fg": "#e6ecac",
+    "bg": "#e7f1b1",
+    "dark": "#f2f5b2",
+    "light": "#f7f9bd",
+    "tint": "#fefdc6"
+  },
+  "Hazel Hum": {
+    "fg": "#bbceb9",
+    "bg": "#b6ccb3",
+    "dark": "#acccae",
+    "light": "#a5cca9",
+    "tint": "#9ccaa8"
+  },
+  "Violet Blue": {
+    "fg": "#51007e",
+    "bg": "#6900a3",
+    "dark": "#5b00ba",
+    "light": "#5000ce",
+    "tint": "#5800e3"
+  },
+  "Red Dark": {
+    "fg": "#b80000",
+    "bg": "#9f0000",
+    "dark": "#900000",
+    "light": "#850000",
+    "tint": "#740000"
+  },
+  "Bowling Alley Carpet": {
+    "fg": "#150549",
+    "bg": "#ff22df",
+    "dark": "#f0ff00",
+    "light": "#ff4d00",
+    "tint": "#00ecff"
+  },
+  "Olive Forest": {
+    "fg": "#7f8d47",
+    "bg": "#606d2d",
+    "dark": "#363123",
+    "light": "#332b23",
+    "tint": "#2b241a"
+  },
+  "Red 5": {
+    "fg": "#800",
+    "bg": "#a21010",
+    "dark": "#bc2020",
+    "light": "#dc3030",
+    "tint": "#f04040"
+  },
+  "Green Life": {
+    "fg": "#287028",
+    "bg": "#448438",
+    "dark": "#609848",
+    "light": "#7cac58",
+    "tint": "#98c068"
+  },
+  "Night Shift": {
+    "fg": "#31286d",
+    "bg": "#64495d",
+    "dark": "#966b4e",
+    "light": "#c98c3e",
+    "tint": "#fbad2e"
+  },
+  "White Umbrella": {
+    "fg": "#fff",
+    "bg": "#f5f5f5",
+    "dark": "#f3f0f0",
+    "light": "#ccc",
+    "tint": "#e2d8b3"
+  },
+  "Teal Lilac Ao3 Theme": {
+    "fg": "#f7e1f7",
+    "bg": "#242424",
+    "dark": "#3c9db2",
+    "light": "#b5d9e5",
+    "tint": "#fff"
+  },
+  "Blue-tone Dark Mode": {
+    "fg": "#141820",
+    "bg": "#9cf",
+    "dark": "#63b8ff",
+    "light": "#313b4d",
+    "tint": "#000"
+  },
+  "Sunset Fades": {
+    "fg": "#d3a68d",
+    "bg": "#c89689",
+    "dark": "#bd8a88",
+    "light": "#a47a83",
+    "tint": "#957381"
+  },
+  "Sunset Glow": {
+    "fg": "#90707d",
+    "bg": "#a77a85",
+    "dark": "#ba8583",
+    "light": "#c69285",
+    "tint": "#cda188"
+  },
+  "Violet Mood": {
+    "fg": "#8808e0",
+    "bg": "#9808e0",
+    "dark": "#a808e0",
+    "light": "#b808e0",
+    "tint": "#c808e0"
+  },
+  "Lilac Petals": {
+    "fg": "#d6c9ed",
+    "bg": "#b7afdb",
+    "dark": "#b8a6d1",
+    "light": "#978fb7",
+    "tint": "#9980a8"
+  },
+  "Zerrus": {
+    "fg": "#f55a5a",
+    "bg": "#b50000",
+    "dark": "#0b7590",
+    "light": "#1c395d",
+    "tint": "#ffa200"
+  },
+  "Lavender And Bubble Gum": {
+    "fg": "#ffe0fc",
+    "bg": "#fad9ff",
+    "dark": "#ecd3ff",
+    "light": "#e3d2ff",
+    "tint": "#dccfff"
+  },
+  "Ocean Tide -2-": {
+    "fg": "#c9f4ff",
+    "bg": "#c4f0ff",
+    "dark": "#c8eaff",
+    "light": "#c3e6ff",
+    "tint": "#c5deff"
+  },
+  "Dusk Shine": {
+    "fg": "#27233d",
+    "bg": "#614b61",
+    "dark": "#a67c9a",
+    "light": "#ecc2bf",
+    "tint": "#fffad4"
+  },
+  "Blonde Fade": {
+    "fg": "#b39581",
+    "bg": "#c4a38d",
+    "dark": "#d9b39a",
+    "light": "#e8c3aa",
+    "tint": "#fbd1b7"
+  },
+  "Spring Spoutling -2-": {
+    "fg": "#fff9dc",
+    "bg": "#f5f4a8",
+    "dark": "#daf3a0",
+    "light": "#9fef96",
+    "tint": "#86e2c7"
+  },
+  "Aqua Grays": {
+    "fg": "#cbd0d1",
+    "bg": "#c7d5d5",
+    "dark": "#bcd3d2",
+    "light": "#b1ceca",
+    "tint": "#a4c2c0"
+  },
+  "Seaweed Seagrass": {
+    "fg": "#519f98",
+    "bg": "#5a76ae",
+    "dark": "#625cb3",
+    "light": "#4c54a8",
+    "tint": "#414092"
+  },
+  "Instagram Fade": {
+    "fg": "#efd984",
+    "bg": "#efc385",
+    "dark": "#f3b187",
+    "light": "#ef9686",
+    "tint": "#ef7ea4"
+  },
+  "Galaxy Fades": {
+    "fg": "#51286a",
+    "bg": "#392465",
+    "dark": "#291c56",
+    "light": "#0e1241",
+    "tint": "#080b32"
+  },
+  "Dusk Twilight": {
+    "fg": "#46384c",
+    "bg": "#574059",
+    "dark": "#715072",
+    "light": "#83557b",
+    "tint": "#8c5d86"
+  },
+  "C Aesthetic": {
+    "fg": "#ffdab9",
+    "bg": "#ffc0cb",
+    "dark": "#e4d2ba",
+    "light": "#ffe4e1",
+    "tint": "#036"
+  },
+  "Spring Sproutling": {
+    "fg": "#afffcf",
+    "bg": "#c9ffc0",
+    "dark": "#e7ffc4",
+    "light": "#f5ffcc",
+    "tint": "#fffee9"
+  },
+  "Candy Sweetness": {
+    "fg": "#fde2ff",
+    "bg": "#f1e4ff",
+    "dark": "#e8e8ff",
+    "light": "#e1eaff",
+    "tint": "#ddedfe"
+  },
+  "Unicorn Hair": {
+    "fg": "#ff9ef8",
+    "bg": "#db91ff",
+    "dark": "#a77dff",
+    "light": "#7f76ff",
+    "tint": "#7b60ff"
+  },
+  "Ocean Tide": {
+    "fg": "#00f0ff",
+    "bg": "#00c9ff",
+    "dark": "#00afff",
+    "light": "#0096ff",
+    "tint": "#0089ff"
+  },
+  "Gipp": {
+    "fg": "#004a00",
+    "bg": "#717300",
+    "dark": "#875d02",
+    "light": "#030303",
+    "tint": "#6b0d0d"
+  },
+  "Licentia": {
+    "fg": "#450054",
+    "bg": "#74007d",
+    "dark": "#ac00d0",
+    "light": "#1e1e1e",
+    "tint": "#bebebe"
+  },
+  "Hutton": {
+    "fg": "#265e09",
+    "bg": "#b8880f",
+    "dark": "#40471a",
+    "light": "#180317",
+    "tint": "#00516f"
+  },
+  "Roses In The Grass": {
+    "fg": "#e0418c",
+    "bg": "#dd2685",
+    "dark": "#d32d83",
+    "light": "#cc2b77",
+    "tint": "#c41d85"
+  },
+  "Sunset Over The Vally": {
+    "fg": "#fbdcbd",
+    "bg": "#ffceaf",
+    "dark": "#ffb8a8",
+    "light": "#fbabab",
+    "tint": "#ffa2a2"
+  },
+  "Mint Fresh": {
+    "fg": "#bed4ff",
+    "bg": "#a8e8ff",
+    "dark": "#a1f9ff",
+    "light": "#9efef5",
+    "tint": "#adffd2"
+  },
+  "Salmon Shade": {
+    "fg": "#ffbec6",
+    "bg": "#ffb1b9",
+    "dark": "#feabab",
+    "light": "#fea097",
+    "tint": "#ff938f"
+  },
+  "Over The Sky": {
+    "fg": "#d4c7f7",
+    "bg": "#cccef9",
+    "dark": "#c2d3fe",
+    "light": "#bad8ff",
+    "tint": "#abe1ff"
+  },
+  "Lemony Limey": {
+    "fg": "#dbfecc",
+    "bg": "#e1ffc8",
+    "dark": "#e9ffc8",
+    "light": "#f2ffc9",
+    "tint": "#faffc7"
+  },
+  "Peachy Love": {
+    "fg": "#ffceaf",
+    "bg": "#ffdac2",
+    "dark": "#ffe5cc",
+    "light": "#ffefd8",
+    "tint": "#fff8e7"
+  },
+  "G-spire Productions": {
+    "fg": "#fff4d0",
+    "bg": "#a6f0f0",
+    "dark": "#fa8072",
+    "light": "#0aa7a7",
+    "tint": "#1b5db6"
+  },
+  "Grinding In Grace Accents": {
+    "fg": "#f9ebac",
+    "bg": "#c6f4fe",
+    "dark": "#9071df",
+    "light": "#a4196d",
+    "tint": "#008080"
+  },
+  "Grinding In Grace Darks": {
+    "fg": "#e2ae61",
+    "bg": "#6db9b7",
+    "dark": "#6a4ea6",
+    "light": "#88124f",
+    "tint": "#194865"
+  },
+  "Bluiish": {
+    "fg": "#5a83a9",
+    "bg": "#ebe7fd",
+    "dark": "#354ab2",
+    "light": "#bcdcf4",
+    "tint": "#595ba1"
+  },
+  "Double Vision Strawberries": {
+    "fg": "#ffa1bd",
+    "bg": "#a0ffb5",
+    "dark": "#bababa",
+    "light": "#c56495",
+    "tint": "#27686d"
+  },
+  "Smart Gradient 1": {
+    "fg": "#c868d8",
+    "bg": "#c058d0",
+    "dark": "#b840c8",
+    "light": "#9828b0",
+    "tint": "#781088"
+  },
+  "Jade And Cherry Blossom": {
+    "fg": "#588578",
+    "bg": "#adcdca",
+    "dark": "#fcc",
+    "light": "#90c8bb",
+    "tint": "#758485"
+  },
+  "Blue06": {
+    "fg": "#0048c0",
+    "bg": "#1068d0",
+    "dark": "#3088e0",
+    "light": "#68a8d8",
+    "tint": "#88d0f0"
+  },
+  "Blue05": {
+    "fg": "#0838d0",
+    "bg": "#2060e8",
+    "dark": "#3978f8",
+    "light": "#4888f0",
+    "tint": "#6098f0"
+  },
+  "Dusk Lake": {
+    "fg": "#d6e1ff",
+    "bg": "#407990",
+    "dark": "#36584b",
+    "light": "#8d677c",
+    "tint": "#fdd5fb"
+  },
+  "Blue04": {
+    "fg": "#102088",
+    "bg": "#2840a8",
+    "dark": "#3848b0",
+    "light": "#4858c0",
+    "tint": "#5060c8"
+  },
+  "Berry Cobbleroad": {
+    "fg": "#511836",
+    "bg": "#cfc3c9",
+    "dark": "#786570",
+    "light": "#443a44",
+    "tint": "#3c343c"
+  },
+  "Goldsss": {
+    "fg": "#daa520",
+    "bg": "#b88608",
+    "dark": "#d4af37",
+    "light": "#cca43d",
+    "tint": "#d7be69"
+  },
+  "Weedozzer": {
+    "fg": "#daffdd",
+    "bg": "#49964f",
+    "dark": "#333",
+    "light": "#bbbbbb",
+    "tint": "#aaaaaa"
+  },
+  "Purple Gold": {
+    "fg": "#662b5b",
+    "bg": "#c7c72d",
+    "dark": "#cccccc",
+    "light": "#bbbbbb",
+    "tint": "#aaaaaa"
+  },
+  "Mildliner Warmth": {
+    "fg": "#9ad0dc",
+    "bg": "#e58ae7",
+    "dark": "#ffc701",
+    "light": "#f0996c",
+    "tint": "#cda393"
+  },
+  "Mildliner New": {
+    "fg": "#fff600",
+    "bg": "#f9b04d",
+    "dark": "#fbb8b8",
+    "light": "#5bd5f0",
+    "tint": "#928aa0"
+  },
+  "Mildliner Cool": {
+    "fg": "#84b7e9",
+    "bg": "#c7e372",
+    "dark": "#d4ddda",
+    "light": "#ef5a68",
+    "tint": "#d4c7f0"
+  },
+  "Stabilo Boss Pastel": {
+    "fg": "#a7e8c8",
+    "bg": "#f8b6a8",
+    "dark": "#fdffb4",
+    "light": "#f7c2d6",
+    "tint": "#c3effc"
+  },
+  "Stabilo Boss Extra": {
+    "fg": "#00c87a",
+    "bg": "#3cbefc",
+    "dark": "#9d64e2",
+    "light": "#f447d1",
+    "tint": "#fdff5b"
+  },
+  "Stabilo Boss": {
+    "fg": "#ffad2a",
+    "bg": "#f8877f",
+    "dark": "#f8fc46",
+    "light": "#77e68a",
+    "tint": "#fb83b3"
+  },
+  "Peach Froyo": {
+    "fg": "#f2b2c5",
+    "bg": "#dfc486",
+    "dark": "#9aeae8",
+    "light": "#6fe1c1",
+    "tint": "#56e5a8"
+  },
+  "Radiant Flowers": {
+    "fg": "#031c60",
+    "bg": "#3a0c54",
+    "dark": "#420e1e",
+    "light": "#4b0202",
+    "tint": "#0f0909"
+  },
+  "Aokigahara": {
+    "fg": "#2a3c09",
+    "bg": "#2a3c11",
+    "dark": "#273114",
+    "light": "#262d17",
+    "tint": "#1d2016"
+  },
+  "Dph Transition 2": {
+    "fg": "#6d0404",
+    "bg": "#ec6556",
+    "dark": "#b29312",
+    "light": "#074028",
+    "tint": "#21968d"
+  },
+  "Dph Transition": {
+    "fg": "#891b1b",
+    "bg": "#e5798a",
+    "dark": "#d04a4a",
+    "light": "#0f5a45",
+    "tint": "#34a9a0"
+  },
+  "Sleepy Ash": {
+    "fg": "#8fb7c2",
+    "bg": "#79a5b1",
+    "dark": "#929ea2",
+    "light": "#838c8c",
+    "tint": "#7e8a99"
+  },
+  "Garfield": {
+    "fg": "#f8a5c2",
+    "bg": "#ffa502",
+    "dark": "#ff9f43",
+    "light": "#000",
+    "tint": "#fed330"
+  },
+  "Halloween Hair": {
+    "fg": "#000",
+    "bg": "#3d1c43",
+    "dark": "#71337c",
+    "light": "#d5aef0",
+    "tint": "#0f0"
+  },
+  "Artemis Colors": {
+    "fg": "#5e6f9b",
+    "bg": "#35376a",
+    "dark": "#a49cb6",
+    "light": "#9a9bbc",
+    "tint": "#9aa4b7"
+  },
+  "Smooches": {
+    "fg": "#d8b1ea",
+    "bg": "#ceacec",
+    "dark": "#f6b4b4",
+    "light": "#eea9c8",
+    "tint": "#f0a0c4"
+  },
+  "Majestic Mantra": {
+    "fg": "#0068d0",
+    "bg": "#0088e0",
+    "dark": "#1898d0",
+    "light": "#38b0d8",
+    "tint": "#70d0e8"
+  },
+  "British Sunset": {
+    "fg": "#d05800",
+    "bg": "#f8b800",
+    "dark": "#f8e008",
+    "light": "#f8f028",
+    "tint": "#f8f090"
+  },
+  "Rose Gardentable": {
+    "fg": "#062529",
+    "bg": "#12353a",
+    "dark": "#1e4247",
+    "light": "#c9485c",
+    "tint": "#ab3345"
+  },
+  "Green Fall": {
+    "fg": "#78c020",
+    "bg": "#68b020",
+    "dark": "#58a020",
+    "light": "#488818",
+    "tint": "#205800"
+  },
+  "Moonchild Palette": {
+    "fg": "#fdfbe7",
+    "bg": "#fde7f2",
+    "dark": "#eadcff",
+    "light": "#dcebff",
+    "tint": "#dcfffe"
+  },
+  "Perfume Bottle": {
+    "fg": "#000",
+    "bg": "#3b1451",
+    "dark": "#553369",
+    "light": "#ae0000",
+    "tint": "#900000"
+  },
+  "Grinding In Grace Palette": {
+    "fg": "#194865",
+    "bg": "#6a4ea6",
+    "dark": "#d489b2",
+    "light": "#faba95",
+    "tint": "#f9ebac"
+  },
+  "Cassie Color Palette 2": {
+    "fg": "#fbc1ac",
+    "bg": "#e2ae61",
+    "dark": "#fa7268",
+    "light": "#875492",
+    "tint": "#274c5c"
+  },
+  "Tulum": {
+    "fg": "#3098b8",
+    "bg": "#70a8c0",
+    "dark": "#88a050",
+    "light": "#586830",
+    "tint": "#284830"
+  },
+  "Light And Dark Blue Dreams": {
+    "fg": "#00e0f0",
+    "bg": "#00a0c0",
+    "dark": "#006098",
+    "light": "#004068",
+    "tint": "#001040"
+  },
+  "October Spice": {
+    "fg": "#eae0a5",
+    "bg": "#d08155",
+    "dark": "#c36b3b",
+    "light": "#70339a",
+    "tint": "#8043ab"
   }
 }
