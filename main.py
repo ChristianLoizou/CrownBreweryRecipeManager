@@ -46,8 +46,8 @@ OVERRIDE_WIDGET_FEATURES = defaultdict(list, {
 # The keys of this dictionary support regex matching, so the mapping can be applied to multiple objects
 TTKWIDGET_MAPPINGS = {
     "button_beer_.*": {
-        "foreground": [('active', 'white')],
-        "background": [('active', 'grey')],
+        "foreground": [('active', 'white'), ('!active', 'focus', 'white')],
+        "background": [('active', 'grey'), ('!active', 'focus', 'grey')],
         "relief": [('pressed', 'groove'), ('!pressed', 'ridge')]
     }
 }
@@ -64,6 +64,9 @@ class BeerEncoder(json.JSONEncoder):
 
 class Beer:
     """ Beer object. Stores all data about custom beers, including name, recipe, ABV, gravity, etc... """
+
+    sorting_mode = 0
+    sorting_modes = ['alphabetical', 'abv+', 'abv-', 'ibu+', 'ibu-', 'gravity+', 'gravity-']
 
     def __init__(self, name, jsondata=None):
         """ Initialise the Beer object, loading its data from JSON string if passed """
@@ -82,11 +85,20 @@ class Beer:
     def __str__(self):
         return repr(self)
 
+    def __lt__(self, other):
+        if self.sorting_mode == 0: return self.name < other.name
+        elif self.sorting_mode == 1: return self.abv < other.abv
+        elif self.sorting_mode == 2: return self.abv > other.abv
+        elif self.sorting_mode == 3: return self.ibu < other.ibu
+        elif self.sorting_mode == 4: return self.ibu > other.ibu
+        elif self.sorting_mode == 5: return self.gravity < other.gravity
+        elif self.sorting_mode == 6: return self.gravity > other.gravity
+
     def _getformattedname(self):
         """ Returns the formatted name for view button """
         return "".join([w.capitalize() for w in self.name.split()])
 
-    def displayInformation(self):
+    def displayInformation(self, event=None):
         """ Creates a popup window showing the beer's data """
         popup = PopupWindow("View beer")
         Label(popup.popup, text=self.name, font=("Helvetica", 18, "bold")).grid(row=0, column=0, columnspan=2)
@@ -408,11 +420,12 @@ def setupWindow():
 
     # Set up the "view" frame
     ROWSIZE = 4
-    for beernum, beer in enumerate(root.beers):
+    for beernum, beer in enumerate(sorted(root.beers)):
         buttonname = "button_beer_"+beer._getformattedname()
         _row, _col = 1 + (beernum//ROWSIZE), beernum%ROWSIZE
-        root.gridWidget(viewframe, Button, buttonname, row=_row, column=_col, text=beer.name,
+        btn = root.gridWidget(viewframe, Button, buttonname, row=_row, column=_col, text=beer.name,
         command=beer.displayInformation, width=14, gkws={"ipadx":2, "ipady":1, "padx":2, "pady":2})
+        btn.bind('<Return>', beer.displayInformation)
 
     # Add an empty error message label for use later
     root.gridWidget(root.app, Label, "label_errormessage", row=2, column=0, text="",
