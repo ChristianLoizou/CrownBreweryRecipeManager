@@ -54,7 +54,8 @@ TTKWIDGET_MAPPINGS = {
 
 # Dictionary of options saved to pickle file for persistance between application runs. Used only on first run on machine
 BASIC_PERSIST = {
-    "THEME": "default"
+    "THEME": "default",
+    "SORTING": 'abc+'
 }
 
 class BeerEncoder(json.JSONEncoder):
@@ -65,8 +66,8 @@ class BeerEncoder(json.JSONEncoder):
 class Beer:
     """ Beer object. Stores all data about custom beers, including name, recipe, ABV, gravity, etc... """
 
-    sorting_mode = 0
-    sorting_modes = ['alphabetical', 'abv+', 'abv-', 'ibu+', 'ibu-', 'gravity+', 'gravity-']
+    sorting_mode = 'abc'
+    sorting_modes = ['abc+', 'abc-', 'abv+', 'abv-', 'ibu+', 'ibu-', 'gravity+', 'gravity-']
 
     def __init__(self, name, jsondata=None):
         """ Initialise the Beer object, loading its data from JSON string if passed """
@@ -86,13 +87,14 @@ class Beer:
         return repr(self)
 
     def __lt__(self, other):
-        if self.sorting_mode == 0: return self.name < other.name
-        elif self.sorting_mode == 1: return self.abv < other.abv
-        elif self.sorting_mode == 2: return self.abv > other.abv
-        elif self.sorting_mode == 3: return self.ibu < other.ibu
-        elif self.sorting_mode == 4: return self.ibu > other.ibu
-        elif self.sorting_mode == 5: return self.gravity < other.gravity
-        elif self.sorting_mode == 6: return self.gravity > other.gravity
+        if self.sorting_mode == 'abc+': return self.name < other.name
+        elif self.sorting_mode == 'abc-': return self.name > other.name
+        elif self.sorting_mode == 'abv+': return self.abv < other.abv
+        elif self.sorting_mode == 'abv-': return self.abv > other.abv
+        elif self.sorting_mode == 'ibu+': return self.ibu < other.ibu
+        elif self.sorting_mode == 'ibu-': return self.ibu > other.ibu
+        elif self.sorting_mode == 'gravity+': return self.gravity < other.gravity
+        elif self.sorting_mode == 'gravity-': return self.gravity > other.gravity
 
     def _getformattedname(self):
         """ Returns the formatted name for view button """
@@ -130,6 +132,7 @@ class Application(Tk):
         self.app = Tk()
         self.title, self.iconpath = title, iconpath
         self.options = self.loadPickle()
+        Beer.sorting_mode = self.options["SORTING"]
         self.rows, self.cols = 1, 1
         self.app.title(title)
         self.app.resizable(False, False)
@@ -158,7 +161,6 @@ class Application(Tk):
 
     def applyTheme(self, override=None):
         """ Applies the loaded theme to the application window. If the theme is default, do nothing and return """
-        if self.theme_name == "default": return None # If theme is default
         loaded_theme = loadTheme(self.theme_name)
         if loaded_theme == None: return None # If theme doesn't exist
         self.app["bg"] = loaded_theme["bg"]
@@ -196,14 +198,15 @@ class Application(Tk):
     def override(self, widget, feature):
         """ Method to override the style of given widget, if that widget is from regular tkinter widget set """
         if "-" in feature: feature, col = feature.split("-")
-        elif "=" in feature:
+        elif "=" in feature and self.theme:
             feature, col = feature.split("=")
             try: col = self.theme[col]
             except KeyError as e:
                 print(f"Failed assigning '{col}' to {repr(widget)}[{feature}]")
                 print(f"No theme feature called '{col}'. Perhaps you meant '-' instead of '=' when defining overrides?")
                 quit()
-        else: col = self.theme[feature]
+        elif self.theme: col = self.theme[feature]
+        else: pass
         try:
             widget[feature] = col
         except TclError as e:
@@ -219,13 +222,15 @@ class Application(Tk):
         if override: to_apply = override
         for feature in to_apply:
             if "-" in feature: feature, col = feature.split("-")
-            elif "=" in feature:
+            elif "=" in feature and self.theme:
                 feature, col = feature.split("=")
                 col = self.theme[col]
-            else: col = self.theme[feature]
+            elif self.theme: col = self.theme[feature]
+            else: pass
             try: feature = FEATURE_TRANSLATE[feature]
             except KeyError: pass
-            features[feature] = col
+            try: features[feature] = col
+            except UnboundLocalError: pass
         formatted_type = repr(widget_type).split("'")[1].split(".")[-1]
         styleguide.configure(f"{widget_name}.T{formatted_type}", **features)
         widget.configure(style=f"{widget_name}.T{formatted_type}")
@@ -289,6 +294,10 @@ def saveBeers(beers, path="data/beers.json"):
         saveJSON[name] = beer
     json.dump(saveJSON, open(path, "w"), indent=2)
 
+def displayBeerList(event=None):
+    beerlist = PopupWindow("Beer List")
+
+
 def loadTheme(themename, path="data/themes.json"):
     """ Loads the theme needed for the application to be styled """
     global THEMES
@@ -318,10 +327,12 @@ def settingsPopup():
     # Add more settings here
     settings_popup = PopupWindow("Settings", minsize=(200, 200), resizable=True)
     settings = dict(
-        THEME = StringVar(value=application.theme_name)
+        THEME = StringVar(value=application.theme_name),
+        SORTING = StringVar(value=Beer.sorting_mode)
     )
     val_dict = {
-        "THEME": list(sorted(THEMES))
+        "THEME": list(sorted(THEMES)),
+        "SORTING": Beer.sorting_modes
     }
     Label(settings_popup.popup, text="").grid(row=0, column=0, columnspan=2)
     Separator(settings_popup.popup, orient=HORIZONTAL).grid(row=1, column=0, columnspan=2, sticky="ew")
@@ -358,17 +369,19 @@ def setupWindow():
     elif SYSTEM == 'Linux': # If the application is running on a Linux machine
         pass
 
+    if root.theme: highlight = root.theme["tint"]
+    else: highlight = 'black'
     titleframe = root.gridWidget(root.app, Frame, "frame_titleframe", row=0, column=0, height=15,
         gkws={"sticky":"new", "pady":5})
     bodyframe = root.gridWidget(root.app, Frame, "frame_bodyframe", row=0, column=0, #highlightthickness=1,
         gkws={"sticky":"sew", "pady":60})
     createframe = root.gridWidget(bodyframe, LabelFrame, "frame_createframe", row=0, column=0, text="Create New Recipe",
-        highlightbackground=root.theme["tint"], highlightthickness=1,
+        highlightbackground=highlight, highlightthickness=1,
         gkws={"sticky":"new"})
     scrollcanvas = root.gridWidget(bodyframe, Canvas, "canvas_scroll", row=1, column=0,
         gkws={"sticky":"new"})
     viewframe = root.gridWidget(scrollcanvas, LabelFrame, "frame_viewframe", row=2, column=0, text="View Recipes",
-        highlightbackground=root.theme["tint"], highlightthickness=1,
+        highlightbackground=highlight, highlightthickness=1,
         gkws={"sticky":"n"})
 
     # Space the "title", "create" and "view" frames correctly
@@ -395,21 +408,22 @@ def setupWindow():
     newbeer["srm"].set("Choose an SRM value")
 
     root.gridWidget(createframe, Label, "label_beername", row=0, column=0, text="Enter beer name: ")
-    name = root.gridWidget(createframe, Entry, "entry_beername", row=0, column=1, gkws={"sticky":"w"})
+    name = root.gridWidget(createframe, Entry, "entry_beername", row=0, column=1, width=17, gkws={"sticky":"w"})
     root.gridWidget(createframe, Label, "label_beertype", row=0, column=2, text="Enter beer type: ",
-        gkws={"sticky":"w"})
+        gkws={"sticky":"w", "padx":3})
     type = root.gridWidget(createframe, OptionMenu, "entry_beertype", newbeer["type"], *BEERTYPES, row=0, column=3,
-        gkws={"sticky":"w"})
+        gkws={"sticky":"w", "padx":3})
 
     root.gridWidget(createframe, Label, "label_servingtemp", row=1, column=0, text="Enter serving temp. (ºC): ")
     servingtemp = root.gridWidget(createframe, Entry, "entry_servingtemp", row=1, column=1, width=10, gkws={"sticky":"w"})
     root.gridWidget(createframe, Label, "label_abv", row=1, column=2, text="Enter ABV (%): ", gkws={"padx":2})
-    abv = root.gridWidget(createframe, Entry, "entry_abv", row=1, column=3, width=10, gkws={"sticky":"w"})
+    abv = root.gridWidget(createframe, Entry, "entry_abv", row=1, column=3, width=10, gkws={"sticky":"w", "padx":3})
 
     root.gridWidget(createframe, Label, "label_ibu", row=2, column=0, text="Enter IBU value: ")
     ibu = root.gridWidget(createframe, Entry, "entry_ibu", row=2, column=1, width=10, gkws={"sticky":"w"})
-    root.gridWidget(createframe, Label, "label_srm", row=2, column=2, text="Enter SRM value: ", gkws={"padx":2})
-    srm = root.gridWidget(createframe, OptionMenu, "entry_srm", newbeer["srm"], *SRMSCALE, row=2, column=3, gkws={"sticky":"w"})
+    root.gridWidget(createframe, Label, "label_srm", row=2, column=2, text="Enter SRM value: ", gkws={"padx":3})
+    srm = root.gridWidget(createframe, OptionMenu, "entry_srm", newbeer["srm"], *SRMSCALE, row=2, column=3,
+        gkws={"sticky":"w", "padx":3})
 
     root.gridWidget(createframe, Label, "label_gravity", row=3, column=0, text="Enter gravity: ")
     gravity = root.gridWidget(createframe, Entry, "entry_gravity", row=3, column=1, width=10, gkws={"sticky":"w"})
@@ -419,13 +433,17 @@ def setupWindow():
         gkws={"columnspan":2, "sticky":"ew", "padx":5, "pady":5})
 
     # Set up the "view" frame
-    ROWSIZE = 4
-    for beernum, beer in enumerate(sorted(root.beers)):
+    ROWSIZE, ROWNUM = 4, 2
+    for beernum, beer in enumerate(sorted(root.beers)[:(ROWNUM*ROWSIZE)-1]):
         buttonname = "button_beer_"+beer._getformattedname()
         _row, _col = 1 + (beernum//ROWSIZE), beernum%ROWSIZE
         btn = root.gridWidget(viewframe, Button, buttonname, row=_row, column=_col, text=beer.name,
         command=beer.displayInformation, width=14, gkws={"ipadx":2, "ipady":1, "padx":2, "pady":2})
         btn.bind('<Return>', beer.displayInformation)
+    if len(root.beers) >= ROWSIZE*ROWNUM:
+        btn = root.gridWidget(viewframe, Button, "button_viewmorebeers", row=ROWNUM, column=ROWSIZE-1, text="More...",
+        command=displayBeerList, width=14, gkws={"ipadx":2, "ipady":1, "padx":2, "pady":2})
+        btn.bind('<Return>', displayBeerList)
 
     # Add an empty error message label for use later
     root.gridWidget(root.app, Label, "label_errormessage", row=2, column=0, text="",
