@@ -65,10 +65,50 @@
   },
   "test ale 1": {
     "type": "American Pale Ale",
-    "servingtemp": "1",
     "abv": "1",
+    "gravity": "1",
     "ibu": "1",
     "srm": "Straw",
-    "gravity": "1"
+    "servingtemp": "1"
+  },
+  "test beer": {
+    "type": "American Porter",
+    "abv": "1",
+    "gravity": "1",
+    "ibu": "1",
+    "srm": "Straw",
+    "servingtemp": "1"
+  },
+  "another test": {
+    "type": "Belgian Dark Strong Ale",
+    "servingtemp": "2",
+    "abv": "2",
+    "ibu": "2",
+    "srm": "Medium Amber",
+    "gravity": "2"
+  },
+  "Crown1 Pale": {
+    "type": "Britisch Pale Ale",
+    "abv": "5.3",
+    "gravity": "5",
+    "ibu": "40",
+    "srm": "Pale Straw",
+    "servingtemp": "7"
+  },
+  "Crown2 Pale": {
+    "type": "Britisch Pale Ale",
+    "abv": "5.3",
+    "gravity": "5",
+    "ibu": "40",
+    "srm": "Pale Straw",
+    "servingtemp": "7"
+  },
+  "Crown3 Pale": {
+    "type": "Britisch Pale Ale",
+    "abv": "5.3",
+    "gravity": "5",
+    "ibu": "40",
+    "srm": "Pale Straw",
+    "servingtemp": "7"
   }
 }
