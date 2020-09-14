@@ -28,7 +28,7 @@ WIDGET_STYLES = {
     Label: ["fg", "bg"],
     Frame: ["bg"],
     Button: ["fg=dark", "bg=light", "borderwidth-0"],
-    Entry: None,
+    Entry: ["relief-groove"],
     OptionMenu: ["fg-black", "bg-white"],
     LabelFrame: ["fg", "bg"],
     Canvas: ["bg"],
@@ -228,10 +228,13 @@ def createBeer(application, data):
     """ Creates a new beer, adds it to the 'application.beers' list, and saves it to the JSON file """
     name = data.pop(0)
     if name.get().lower() in map(lambda b: b.name.lower(), application.beers):
-        application.widgets["label_errormessage"]["text"] = "Error adding beer. Name already taken"
+        application.widgets["label_errormessage"]["text"] = "Error adding beer: Name already taken"
         return False
     elif name.get() == "":
-        application.widgets["label_errormessage"]["text"] = "Error adding beer. Enter valid name"
+        application.widgets["label_errormessage"]["text"] = "Error adding beer: Enter valid name"
+        return False
+    elif len(name.get()) > 16:
+        application.widgets["label_errormessage"]["text"] = "Error adding beer: Name must not be more than 16 characters long"
         return False
     else:
         headers = ["type", "servingtemp", "abv", "ibu", "srm", "gravity"]
@@ -240,7 +243,7 @@ def createBeer(application, data):
             val = repr(v.get())
             if len(v.get()) == 0 or (kw=="type" and v.get()=="Choose a type") or (kw=="srm" and v.get()=="Choose an SRM value"):
                 keyword = kw if kw != "servingtemp" else "serving temp"
-                application.widgets["label_errormessage"]["text"] = f"Error adding beer. Enter valid {keyword}."
+                application.widgets["label_errormessage"]["text"] = f"Error adding beer: Enter valid {keyword}."
                 return False
             exec(f"newbeer.{kw} = {val}")
         application.beers.append(newbeer)
@@ -380,24 +383,24 @@ def setupWindow():
     newbeer["srm"].set("Choose an SRM value")
 
     root.gridWidget(createframe, Label, "label_beername", row=0, column=0, text="Enter beer name: ")
-    name = root.gridWidget(createframe, Entry, "entry_beername", row=0, column=1, gkws={"sticky":"e"})
+    name = root.gridWidget(createframe, Entry, "entry_beername", row=0, column=1, gkws={"sticky":"w"})
     root.gridWidget(createframe, Label, "label_beertype", row=0, column=2, text="Enter beer type: ",
-        gkws={"sticky":"e"})
+        gkws={"sticky":"w"})
     type = root.gridWidget(createframe, OptionMenu, "entry_beertype", newbeer["type"], *BEERTYPES, row=0, column=3,
-        gkws={"sticky":"e"})
+        gkws={"sticky":"w"})
 
     root.gridWidget(createframe, Label, "label_servingtemp", row=1, column=0, text="Enter serving temp. (ºC): ")
-    servingtemp = root.gridWidget(createframe, Entry, "entry_servingtemp", row=1, column=1, width=10, gkws={"sticky":"e"})
-    root.gridWidget(createframe, Label, "label_abv", row=1, column=2, text="Enter ABV (%): ")
-    abv = root.gridWidget(createframe, Entry, "entry_abv", row=1, column=3, width=10, gkws={"sticky":"e"})
+    servingtemp = root.gridWidget(createframe, Entry, "entry_servingtemp", row=1, column=1, width=10, gkws={"sticky":"w"})
+    root.gridWidget(createframe, Label, "label_abv", row=1, column=2, text="Enter ABV (%): ", gkws={"padx":2})
+    abv = root.gridWidget(createframe, Entry, "entry_abv", row=1, column=3, width=10, gkws={"sticky":"w"})
 
     root.gridWidget(createframe, Label, "label_ibu", row=2, column=0, text="Enter IBU value: ")
-    ibu = root.gridWidget(createframe, Entry, "entry_ibu", row=2, column=1, width=10, gkws={"sticky":"e"})
-    root.gridWidget(createframe, Label, "label_srm", row=2, column=2, text="Enter SRM value: ")
-    srm = root.gridWidget(createframe, OptionMenu, "entry_srm", newbeer["srm"], *SRMSCALE, row=2, column=3, gkws={"sticky":"e"})
+    ibu = root.gridWidget(createframe, Entry, "entry_ibu", row=2, column=1, width=10, gkws={"sticky":"w"})
+    root.gridWidget(createframe, Label, "label_srm", row=2, column=2, text="Enter SRM value: ", gkws={"padx":2})
+    srm = root.gridWidget(createframe, OptionMenu, "entry_srm", newbeer["srm"], *SRMSCALE, row=2, column=3, gkws={"sticky":"w"})
 
     root.gridWidget(createframe, Label, "label_gravity", row=3, column=0, text="Enter gravity: ")
-    gravity = root.gridWidget(createframe, Entry, "entry_gravity", row=3, column=1, width=10, gkws={"sticky":"e"})
+    gravity = root.gridWidget(createframe, Entry, "entry_gravity", row=3, column=1, width=10, gkws={"sticky":"w"})
 
     submit = root.gridWidget(createframe, Button, "button_submitcreation", row=3, column=2, text="Create",
         command=lambda: createBeer(root, [name, newbeer["type"], servingtemp, abv, ibu, newbeer["srm"], gravity]),
@@ -409,7 +412,7 @@ def setupWindow():
         buttonname = "button_beer_"+beer._getformattedname()
         _row, _col = 1 + (beernum//ROWSIZE), beernum%ROWSIZE
         root.gridWidget(viewframe, Button, buttonname, row=_row, column=_col, text=beer.name,
-        command=beer.displayInformation, gkws={"ipadx":35, "ipady":15, "padx":5, "pady":5})
+        command=beer.displayInformation, width=14, gkws={"ipadx":2, "ipady":1, "padx":2, "pady":2})
 
     # Add an empty error message label for use later
     root.gridWidget(root.app, Label, "label_errormessage", row=2, column=0, text="",
