@@ -21,10 +21,10 @@
     "tint":"#F96F0C"
   },
   "sky-blue": {
-    "bg": "#0096FE",
-    "fg": "#232323",
-    "dark":"#232323",
-    "light":"#5BC1F1",
-    "tint":"#78FCFF"
+    "fg": "#281621",
+    "bg": "#c8dceb",
+    "dark": "#633d1c",
+    "light": "#83b4c8",
+    "tint": "#1a36a1"
   }
 }
