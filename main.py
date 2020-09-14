@@ -29,7 +29,7 @@ WIDGET_STYLES = {
     Frame: ["bg"],
     Button: ["fg=dark", "bg=light", "borderwidth-0"],
     Entry: ["relief-groove"],
-    OptionMenu: ["fg-black", "bg-white"],
+    OptionMenu: ["fg-black", "bg"],
     LabelFrame: ["fg", "bg"],
     Canvas: ["bg"],
     Menu: None
@@ -38,9 +38,10 @@ WIDGET_STYLES = {
 # A dictionary of widget names with features of the associated widget that should be overridden.
 # NOTE: Widgets in the dictionary IGNORE 'WIDGET_STYLES' dictionary, so ALL styles must be applied here.
 OVERRIDE_WIDGET_FEATURES = defaultdict(list, {
-    "label_errormessage": ["fg-red", "bg", "weight-bold"],
-    "label_title": ["fg=tint", "bg", "weight-bold"]
+    "label_errormessage": ["fg-red", "bg"],
+    "label_title": ["fg=tint", "bg"]
 })
+
 
 # A dictionary of widget mappings to add additional complex state-dependant styles to ttk widgets
 # The keys of this dictionary support regex matching, so the mapping can be applied to multiple objects
@@ -123,8 +124,8 @@ class PopupWindow(Toplevel):
         self.popup.resizable(width=resizable, height=resizable)
         self.popup.minsize(*minsize)
         menubar = Menu(self.popup)
-        bg = styleguide.lookup("TLabel", "background")
-        self.popup.config(menu=menubar, bg=bg)
+        self.bg = styleguide.lookup("TLabel", "background")
+        self.popup.config(menu=menubar, bg=self.bg)
 
 class Application(Tk):
     """ Application object. Blueprint for the window shown to user, with custom methods to allow for easier adding of widgets """
@@ -335,12 +336,14 @@ def settingsPopup():
         "SORTING": Beer.sorting_modes
     }
     Label(settings_popup.popup, text="").grid(row=0, column=0, columnspan=2)
-    Separator(settings_popup.popup, orient=HORIZONTAL).grid(row=1, column=0, columnspan=2, sticky="ew")
+    # Separator(settings_popup.popup, orient=HORIZONTAL).grid(row=1, column=0, columnspan=2, sticky="ew")
     for (_row, (option, setting)) in enumerate(application.options.items()):
-        Label(settings_popup.popup, text=f"{option.lower().capitalize()}: ").grid(row=_row+1, column=0)
-        OptionMenu(settings_popup.popup, settings[option], *val_dict[option]).grid(row=_row+1, column=1)
+        Label(settings_popup.popup, text=f"{option.lower().capitalize()}: ").grid(row=_row+1, column=0, padx=5, ipady=5)
+        om = OptionMenu(settings_popup.popup, settings[option], *val_dict[option])
+        om.configure(bg = settings_popup.bg)
+        om.grid(row=_row+1, column=1, padx=5, ipady=5)
     submit = Button(settings_popup.popup, text="Submit", command=lambda: submitSettings(settings))
-    submit.grid(row=len(application.options)+1, column=0, columnspan=2, sticky="s")
+    submit.grid(row=len(application.options)+1, column=0, columnspan=2, sticky="s", padx=5, pady=15)
 
 def configure(event):
     """ This method is called when the application.app window is resized """
@@ -372,7 +375,7 @@ def setupWindow():
     if root.theme: highlight = root.theme["tint"]
     else: highlight = 'black'
     titleframe = root.gridWidget(root.app, Frame, "frame_titleframe", row=0, column=0, height=15,
-        gkws={"sticky":"new", "pady":5})
+        gkws={"sticky":"new", "pady":5, "padx":20, "ipadx": 20})
     bodyframe = root.gridWidget(root.app, Frame, "frame_bodyframe", row=0, column=0, #highlightthickness=1,
         gkws={"sticky":"sew", "pady":60})
     createframe = root.gridWidget(bodyframe, LabelFrame, "frame_createframe", row=0, column=0, text="Create New Recipe",
@@ -434,14 +437,14 @@ def setupWindow():
 
     # Set up the "view" frame
     ROWSIZE, ROWNUM = 4, 2
-    for beernum, beer in enumerate(sorted(root.beers)[:(ROWNUM*ROWSIZE)-1]):
+    for beernum, beer in enumerate(sorted(root.beers)[:(ROWNUM*ROWSIZE)]):
         buttonname = "button_beer_"+beer._getformattedname()
         _row, _col = 1 + (beernum//ROWSIZE), beernum%ROWSIZE
         btn = root.gridWidget(viewframe, Button, buttonname, row=_row, column=_col, text=beer.name,
         command=beer.displayInformation, width=14, gkws={"ipadx":2, "ipady":1, "padx":2, "pady":2})
         btn.bind('<Return>', beer.displayInformation)
-    if len(root.beers) >= ROWSIZE*ROWNUM:
-        btn = root.gridWidget(viewframe, Button, "button_viewmorebeers", row=ROWNUM, column=ROWSIZE-1, text="More...",
+    if len(root.beers) > ROWSIZE*ROWNUM:
+        btn = root.gridWidget(viewframe, Button, "button_viewmorebeers", row=ROWNUM, column=ROWSIZE-1, text="View more...",
         command=displayBeerList, width=14, gkws={"ipadx":2, "ipady":1, "padx":2, "pady":2})
         btn.bind('<Return>', displayBeerList)
 
