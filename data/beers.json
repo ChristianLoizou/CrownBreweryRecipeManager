@@ -62,5 +62,13 @@
     "ibu": "2",
     "srm": "Pale Straw",
     "servingtemp": "2"
+  },
+  "test ale 1": {
+    "type": "American Pale Ale",
+    "servingtemp": "1",
+    "abv": "1",
+    "ibu": "1",
+    "srm": "Straw",
+    "gravity": "1"
   }
 }
