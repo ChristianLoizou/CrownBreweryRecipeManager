@@ -27,7 +27,7 @@ FEATURE_TRANSLATE = {
 WIDGET_STYLES = {
     Label: ["fg", "bg"],
     Frame: ["bg"],
-    Button: ["fg=dark", "bg=light", "borderwidth-0"],
+    Button: ["fg-black", "bg=light", "borderwidth-0"],
     Entry: ["relief-groove"],
     OptionMenu: ["fg-black", "bg"],
     LabelFrame: ["fg", "bg"],
@@ -55,7 +55,7 @@ TTKWIDGET_MAPPINGS = {
 
 # Dictionary of options saved to pickle file for persistance between application runs. Used only on first run on machine
 BASIC_PERSIST = {
-    "THEME": "default",
+    "THEME": "Default",
     "SORTING": 'abc+'
 }
 
