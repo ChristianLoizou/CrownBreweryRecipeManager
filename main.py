@@ -42,7 +42,6 @@ OVERRIDE_WIDGET_FEATURES = defaultdict(list, {
     "label_title": ["fg=tint", "bg"]
 })
 
-
 # A dictionary of widget mappings to add additional complex state-dependant styles to ttk widgets
 # The keys of this dictionary support regex matching, so the mapping can be applied to multiple objects
 TTKWIDGET_MAPPINGS = {
@@ -67,7 +66,7 @@ class BeerEncoder(json.JSONEncoder):
 class Beer:
     """ Beer object. Stores all data about custom beers, including name, recipe, ABV, gravity, etc... """
 
-    sorting_mode = 'abc'
+    sorting_mode = 'abc+'
     sorting_modes = ['abc+', 'abc-', 'abv+', 'abv-', 'ibu+', 'ibu-', 'gravity+', 'gravity-']
 
     def __init__(self, name, jsondata=None):
@@ -296,8 +295,30 @@ def saveBeers(beers, path="data/beers.json"):
     json.dump(saveJSON, open(path, "w"), indent=2)
 
 def displayBeerList(event=None):
+    """ Creates a popup window which shows the list of all beers (when there are more than 8 beers stored in the application) """
+    global styleguide
     beerlist = PopupWindow("Beer List")
+    mainframe = Frame(beerlist.popup)
+    mainframe.pack(fill="both", expand=1)
+    canvas = Canvas(mainframe)
+    canvas.pack(side="left", fill="both", expand=1)
+    scrollbar = Scrollbar(mainframe, orient="vertical", command=canvas.yview)
+    scrollbar.pack(side="right", fill="y")
+    canvas.configure(yscrollcommand=scrollbar.set)
+    canvas.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+    # canvas.bind("<MouseWheel>", canvas.yview)
+    innerframe = Frame(canvas)
+    canvas.create_window((0, 0), window=innerframe, anchor="nw")
 
+    # features = {}
+    # mappings = TTKWIDGET_MAPPINGS["button_morebeers"]
+    # styleguide.configure("morebeers.TButton", **features)
+    # stylguide.map("morebeers.TButton", **mappings)
+
+    for beer in application.beers:
+        btn = Button(innerframe, text=beer.name, command=lambda: print(beer.name), width=50)
+        btn.configure(style='TLabel')
+        btn.pack(anchor='w', padx=5)
 
 def loadTheme(themename, path="data/themes.json"):
     """ Loads the theme needed for the application to be styled """
