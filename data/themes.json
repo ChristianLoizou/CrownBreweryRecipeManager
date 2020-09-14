@@ -1,4 +1,11 @@
 {
+  "default": {
+    "bg": "#BBBBBB",
+    "fg": "#000000",
+    "dark":"#222222",
+    "light":"#CCCCCC",
+    "tint":"#111111"
+  },
   "dark-blue": {
     "bg": "#252525",
     "fg": "#D4D4D4",
