@@ -1,4 +1,12 @@
 {
+  "Crown Pale": {
+    "type": "Britisch Pale Ale",
+    "abv": "5.3",
+    "gravity": "5",
+    "ibu": "40",
+    "srm": "Pale Straw",
+    "servingtemp": "7"
+  },
   "Crown Porter": {
     "type": "English Porter",
     "abv": "4.5",
@@ -14,14 +22,6 @@
     "ibu": "40",
     "srm": "Pale Straw",
     "servingtemp": "7"
-  },
-  "Crown Pale": {
-    "type": "Belgian Pale Ale",
-    "abv": "4.3",
-    "gravity": "3.4",
-    "ibu": "50",
-    "srm": "Choose an SRM value",
-    "servingtemp": "5"
   },
   "Crown Pils": {
     "type": "German Pils",
@@ -57,10 +57,10 @@
   },
   "test ale 3": {
     "type": "Belgian Dark Strong Ale",
-    "servingtemp": "2",
     "abv": "2",
+    "gravity": "2",
     "ibu": "2",
     "srm": "Pale Straw",
-    "gravity": "2"
+    "servingtemp": "2"
   }
 }
