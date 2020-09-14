@@ -316,8 +316,8 @@ def displayBeerList(event=None):
     # stylguide.map("morebeers.TButton", **mappings)
 
     for beer in application.beers:
-        btn = Button(innerframe, text=beer.name, command=lambda: print(beer.name), width=50)
-        btn.configure(style='TLabel')
+        btn = Button(innerframe, text=beer.name, command=beer.displayInformation, width=40)
+        btn.configure(style='TLabel') # btn.configure(style="morebeers.TButton")
         btn.pack(anchor='w', padx=5)
 
 def loadTheme(themename, path="data/themes.json"):
