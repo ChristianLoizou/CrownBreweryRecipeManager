@@ -33,10 +33,34 @@
   },
   "Crown Doppelbock": {
     "type": "Doppelbock",
-    "servingtemp": "8",
     "abv": "8",
+    "gravity": "6.2",
     "ibu": "20",
     "srm": "Pale Amber",
-    "gravity": "6.2"
+    "servingtemp": "8"
+  },
+  "test ale": {
+    "type": "American Lager",
+    "abv": "1",
+    "gravity": "11",
+    "ibu": "1",
+    "srm": "Pale Straw",
+    "servingtemp": "1"
+  },
+  "test ale 2": {
+    "type": "American Porter",
+    "abv": "1",
+    "gravity": "1",
+    "ibu": "1",
+    "srm": "Straw",
+    "servingtemp": "1"
+  },
+  "test ale 3": {
+    "type": "Belgian Dark Strong Ale",
+    "servingtemp": "2",
+    "abv": "2",
+    "ibu": "2",
+    "srm": "Pale Straw",
+    "gravity": "2"
   }
 }
