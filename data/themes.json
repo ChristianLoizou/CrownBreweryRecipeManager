@@ -330,10 +330,10 @@
   },
   "Dark Blue Grey Club": {
     "fg": "#fff",
-    "bg": "#eee",
-    "dark": "#c3c3cb",
-    "light": "#17206d",
-    "tint": "#1c3953"
+    "bg": "#333",
+    "dark": "#4c4943",
+    "light": "#3770bd",
+    "tint": "#1c7993"
   },
   "Theabbie": {
     "fg": "#4cc17f",
